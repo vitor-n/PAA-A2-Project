@@ -5,37 +5,56 @@ typedef int vertex;
 typedef int street;
 typedef int region;
 
-
-struct EdgeNode {
-    vertex vert;
+typedef struct EdgeNode {
     EdgeNode* next;
+    vertex endVertex;
 
+    //important values for the crossing
     int lenght;
-    int maxSpeed;
-    int nBuildings;
-    street street;
-    region region;
-};
+    float maxSpeed;
+    int excavationCost;
+
+    //building counts (should sum up to a value (function of the lenght))
+    int nResidential;
+    int nComercial;
+    int nIndustrial;
+    int nTouristic;
+
+    //ownership infos
+    int street;
+    int streetOffset;
+    int region;
+} StreetSegment;
+
+typedef struct VertexNode {
+    int region;
+    StreetSegment* segments;
+} Crossing;
 
 
-class Graph {
+//Internal names and methods of the class will keep graph naming. public things will have city nomenclature
+//This implementation is based on a list of adjacencies.
+class CityGraph {
 private:
-    int m_numVertices; //Immutable
+    int m_numVertices; //Immutable - how many crosses the city has
     int m_numEdges; //Edges count will be track to easen life in some parts
-    EdgeNode** m_edges; //Two references because it's a list of nodes
+    Crossing** m_vertices; //Two references because it's a list of nodes
 
 public:
-    Graph(int numVertices);
-    ~Graph();
-    EdgeNode** edges();
+    //Class constructor and destructor
+    CityGraph(int numVertex);
+    ~CityGraph();
 
-    bool hasEdge(vertex, vertex); //O(V)
-    void addEdge(vertex, vertex); //O(V)
-    void removeEdge(vertex, vertex); //O(V)
+    Crossing** crossings();
+    StreetSegment* m_edges(vertex);
+
+    bool hasSegment(vertex, vertex); //O(V)
+    void addSegment(vertex, vertex); //O(V)
+    void removeSegment(vertex, vertex); //O(V)
 
     void print(); //O(V + E)
 
-    bool isSubGraph(Graph&); //O(E + E')
+    bool isSubGraph(CityGraph&); //O(E + E')
     bool isValidPath(vertex[], int, bool&); //O(n * V)
 
     bool hasPath(vertex, vertex); //O(V + E) - envelops below function
