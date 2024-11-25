@@ -46,7 +46,6 @@ void Graph::addEdge(vertex v1, vertex v2){
             m_edges[v1] = new EdgeNode;
             m_edges[v1]->next = node;
             m_edges[v1]->vert = v2;
-            m_edges[v1]->maxSpeed = 60;
             m_numEdges++;
         } else{
             while(node->next != nullptr && node->next->vert < v2) {
@@ -56,7 +55,6 @@ void Graph::addEdge(vertex v1, vertex v2){
                 node->next = new EdgeNode;
                 node->next->next = nullptr;
                 node->next->vert = v2;
-                node->maxSpeed = 60;
                 m_numEdges++;
             }
             else if (node->next->vert != v2){ //Avoid adding the same vertex two times
@@ -64,7 +62,6 @@ void Graph::addEdge(vertex v1, vertex v2){
                 newVertex->vert = v2;
                 newVertex->next = node->next;
                 node->next = newVertex;
-                node->maxSpeed = 60;
                 m_numEdges++;
             }
         }
@@ -101,7 +98,7 @@ void Graph::print(){
     for (vertex i = 0; i < m_numVertices; i++){
         EdgeNode* node = m_edges[i]; //Get the list head of edges for that vertex
         while (node != nullptr) { //And goes printing everything
-            cout << "(" << i << " " << node->vert << " " << node->maxSpeed << ") ";
+            cout << "(" << i << " " << node->vert << ") ";
             node = node->next;
         }
     }
@@ -157,17 +154,17 @@ bool Graph::isValidPath(vertex path[], int iLength, bool& hasCycle){
     return true;
 }
 
-int main(){
-
-    Edge ed = {0, 1, 120, 60, 123, 123};
-
-    Graph g(1000);
-
-    g.addEdge(0, 1);
-    g.addEdge(0, 2);
-    g.addEdge(1, 3);
-    g.addEdge(2, 4);
-    g.addEdge(3, 5);
-    g.addEdge(4, 5);
-    g.print();
-}
+//namespace F1 {
+//int main(){
+//    Graph g(1000);
+//
+//    g.addEdge(0, 1);
+//    g.addEdge(0, 2);
+//    g.addEdge(1, 3);
+//    g.addEdge(2, 4);
+//    g.addEdge(3, 5);
+//    g.addEdge(4, 5);
+//    g.print();
+//
+//    return 0;
+//}}
