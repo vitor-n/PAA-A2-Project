@@ -9,8 +9,8 @@
 
 std::vector<std::string> split(const std::string &s, char delimiter);
 std::map<std::string, int> configFromCFG(std::string folderPath);
-void nodesFromCSV(Graph& cityPath, std::string folderPath);
-void edgesFromCSV(Graph& cityGraph, std::string folderPath);
-Graph cityParser(std::string folderPath);
+void nodesFromCSV(CityGraph& cityPath, std::string folderPath);
+void edgesFromCSV(CityGraph& cityGraph, std::string folderPath);
+CityGraph cityParser(std::string folderPath);
 
 #endif

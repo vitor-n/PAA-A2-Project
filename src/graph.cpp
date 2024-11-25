@@ -49,11 +49,11 @@ bool CityGraph::hasSegment(vertex v1, vertex v2){
 }
 
 //O(V) because in worst case it adds on the end of the list
-void CityGraph::addSegment(vertex v1, vertex v2){
+void CityGraph::addSegment(vertex v1, vertex v2, EdgeNode* informations = nullptr){
     if(v1 >= 0 && v1 < m_numVertices && v2 >= 0 && v2 < m_numVertices){
         EdgeNode* node = m_edges(v1); //Get the list head of edges for that vertex
         if(node == nullptr || node->endVertex >= v2){
-            m_vertices[v1]->segments = new EdgeNode;
+            m_vertices[v1]->segments = informations? informations : new EdgeNode;
             m_vertices[v1]->segments->next = node;
             m_vertices[v1]->segments->endVertex = v2;
             m_numEdges++;
@@ -62,13 +62,13 @@ void CityGraph::addSegment(vertex v1, vertex v2){
                 node = node->next;
             }
             if(node->next == nullptr && node->endVertex != v2){
-                node->next = new EdgeNode;
+                node->next = informations? informations : new EdgeNode;
                 node->next->next = nullptr;
                 node->next->endVertex = v2;
                 m_numEdges++;
             }
             else if (node->next->endVertex != v2){ //Avoid adding the same vertex two times
-                EdgeNode* newVertex = new EdgeNode;
+                EdgeNode* newVertex = informations? informations : new EdgeNode;
                 newVertex->endVertex = v2;
                 newVertex->next = node->next;
                 node->next = newVertex;

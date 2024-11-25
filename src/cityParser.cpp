@@ -36,13 +36,13 @@ map<string, int> configFromCFG(string folderPath) {
     return config;
 }
 
-void nodesFromCSV(Graph& cityPath, string folderPath) {
+void nodesFromCSV(CityGraph& cityPath, string folderPath) {
     ifstream file(folderPath + "/city-edges.csv");
 
     return;
 }
 
-void edgesFromCSV(Graph& cityGraph, string folderPath) {
+void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
     ifstream file(folderPath + "/city-edges.csv");
     string line;
     int numRows = 0;
@@ -74,14 +74,28 @@ void edgesFromCSV(Graph& cityGraph, string folderPath) {
         street = row[7];
         hasBusLane = stoi(row[8]);
 
-        cityGraph.addEdge(node1, node2);
+        EdgeNode* node = new EdgeNode;
+        node->lenght = length;
+        node->maxSpeed = maxSpeed;
+        node->escavationCost = costToEscavate;
+
+        node->nComercial = numResidentials - numBuildings;
+        node->nResidential = numResidentials;
+        node->nIndustrial = 0;
+        node->nTouristic = 0;
+
+        node->region = region;
+        node->street = street;
+        node->streetOffset = 0;
+
+        cityGraph.addSegment(node1, node2, node);
     }
 }
 
-Graph cityParser(string folderPath) {
+CityGraph cityParser(string folderPath) {
     map<string, int> cfg = configFromCFG(folderPath);
 
-    Graph cityGraph(cfg["num_nodes"]);
+    CityGraph cityGraph(cfg["num_nodes"]);
     
     nodesFromCSV(cityGraph, folderPath);
     edgesFromCSV(cityGraph, folderPath);
@@ -90,6 +104,6 @@ Graph cityParser(string folderPath) {
 }
 
 int main () {
-    Graph cityGraph = cityParser("data/city-1");
+    CityGraph cityGraph = cityParser("data/city-1");
     cityGraph.print();
 }
