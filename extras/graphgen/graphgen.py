@@ -29,8 +29,6 @@ class GraphGenerator:
         len_row = np.random.randint(5, 20, size=m) * 10
         len_col = np.random.randint(5, 20, size=n) * 10
 
-        max_speed = [30, 50, 60, 70, 80, 90, 100]
-        max_speed_weights = [0.1, 0.2, 0.2, 0.2, 0.2, 0.05, 0.05]
         mean_cost_meter = 300
         deviation_cost_meter = 100
 
@@ -49,7 +47,6 @@ class GraphGenerator:
                     num_buildings = len_row[i] // 10 - np.random.randint(0, len_row[i] // 10 - 1)
                     self.graph.edges[edge]["numBuildings"] = num_buildings
                     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
-                    self.graph.edges[edge]["maxSpeed"] = np.random.choice(max_speed, p=max_speed_weights)
                     self.graph.edges[edge]["costToEscavate"] = len_row[i] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
 
                     
@@ -65,7 +62,6 @@ class GraphGenerator:
                     num_buildings = len_col[j] // 10 - np.random.randint(0, len_col[j] // 10 - 1)
                     self.graph.edges[edge]["numBuildings"] = num_buildings
                     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
-                    self.graph.edges[edge]["maxSpeed"] = np.random.choice(max_speed, p=max_speed_weights)
                     self.graph.edges[edge]["costToEscavate"] = len_col[j] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
                     self.edges.append(edge)
                     self.edges.append((node2, node1))
@@ -108,18 +104,25 @@ class GraphGenerator:
     
     def gen_streets(self, max_len=4):
         
-        def update_street(node, neighbor, street_id, last_region, curr_len, curr_max_len):
+        max_speed_list = [30, 50, 60, 70, 80, 90, 100]
+        max_speed_weights = [0.1, 0.2, 0.2, 0.2, 0.2, 0.05, 0.05]
+
+        max_speed = np.random.choice(max_speed_list, p=max_speed_weights)
+
+        def update_street(node, neighbor, street_id, last_region, curr_len, curr_max_len, max_speed):
             if self.edge_to_region[(node, neighbor)] == last_region and curr_len < curr_max_len:
                 curr_len += 1
             else:
                 street_id += 2
                 curr_max_len = random.randint(1, max_len)
+                max_speed = np.random.choice(max_speed_list, p=max_speed_weights)
                 curr_len = 0
             self.edge_to_street[(node, neighbor)] = street_id
+            self.graph.edges[(node, neighbor)]["maxSpeed"] = max_speed
             self.graph.edges[(node, neighbor)]["street"] = street_id
             last_region = self.edge_to_region[(node, neighbor)]
 
-            return street_id, last_region, curr_len, curr_max_len
+            return street_id, last_region, curr_len, curr_max_len, max_speed
         
         street_id_h = 0
         street_id_v = 1
@@ -132,8 +135,8 @@ class GraphGenerator:
                 node = i * self.num_cols + j
                 right_node = i * self.num_cols + (j + 1)
 
-                info = update_street(node, right_node, street_id_h, last_region, curr_len, curr_max_len)
-                street_id_h, last_region, curr_len, curr_max_len = info
+                info = update_street(node, right_node, street_id_h, last_region, curr_len, curr_max_len, max_speed)
+                street_id_h, last_region, curr_len, curr_max_len, max_speed = info
 
         curr_len = 0
         curr_max_len = random.randint(1, max_len)
@@ -143,8 +146,8 @@ class GraphGenerator:
                 node = i * self.num_cols + j
                 down_node = (i + 1) * self.num_cols + j
 
-                info = update_street(node, down_node, street_id_v, last_region, curr_len, curr_max_len)
-                street_id_v, last_region, curr_len, curr_max_len = info
+                info = update_street(node, down_node, street_id_v, last_region, curr_len, curr_max_len, max_speed)
+                street_id_v, last_region, curr_len, curr_max_len, max_speed = info
 
     def create_subgraphs(self):
         region_edges = {}
