@@ -28,6 +28,7 @@ public:
     Heap(int size, HeapType);
     ~Heap();
     void set_mapping(T[]);
+    int heapSize();
 
     //retrieval and insertion operations
     int get_top();

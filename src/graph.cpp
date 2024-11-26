@@ -199,5 +199,53 @@ int main(){
     g.removeSegment(4, 1);
     g.print();
 
+
+    //http://graphonline.top/en/?graph=EBRQQOMYwjhUngCi
+    CityGraph g7 = CityGraph(8);
+    EdgeNode* node = new EdgeNode;
+    node->lenght = 7;
+    g7.addSegment(7, 1, node);
+    EdgeNode* node1 = new EdgeNode;
+    node1->lenght = 5;
+    g7.addSegment(1, 2, node1);
+    EdgeNode* node2 = new EdgeNode;
+    node2->lenght = 14;
+    g7.addSegment(1, 5, node2);
+    EdgeNode* node3 = new EdgeNode;
+    node3->lenght = 1;
+    g7.addSegment(0, 4, node3);
+    EdgeNode* node4 = new EdgeNode;
+    node4->lenght = 6;
+    g7.addSegment(1, 4, node4);
+    EdgeNode* node5 = new EdgeNode;
+    node5->lenght = 2;
+    g7.addSegment(4, 1, node5);
+    EdgeNode* node6 = new EdgeNode;
+    node6->lenght = 11;
+    g7.addSegment(2, 7, node6);
+    EdgeNode* node7 = new EdgeNode;
+    node7->lenght = 1;
+    g7.addSegment(6, 5, node7);
+    EdgeNode* node8 = new EdgeNode;
+    node8->lenght = 6;
+    g7.addSegment(5, 6, node8);
+    EdgeNode* node9 = new EdgeNode;
+    node9->lenght = 14;
+    g7.addSegment(6, 0, node9);
+    EdgeNode* node10 = new EdgeNode;
+    node10->lenght = 14;
+    g7.addSegment(3, 1, node10);
+    EdgeNode* node11 = new EdgeNode;
+    node11->lenght = 2;
+    g7.addSegment(5, 1, node11);
+
+    vertex g7Parents[8];
+    int g7Distances[8];
+    g7.CPTDijkstra(0, g7Parents, g7Distances);
+    cout << "Menores distâncias partindo de 0 em g7: ";
+    printList(g7Distances, 8);
+    cout << "CPT: ";
+    printList(g7Parents, 8);
+
         return 0;
 }//}

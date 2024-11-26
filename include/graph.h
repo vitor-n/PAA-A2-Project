@@ -67,6 +67,9 @@ public:
 
     bool isTopological(); //theta(V + E)
     bool hasTopologicalOrder(int[]); //theta(V + E)
+
+    template <typename T> void CPTDijkstra(vertex, vertex[], T[]);
 };
+
 
 #endif

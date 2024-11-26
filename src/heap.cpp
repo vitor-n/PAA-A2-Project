@@ -18,7 +18,6 @@ Heap<T>::Heap(int size, HeapType type): heap(nullptr), mapping(nullptr),
 template <typename T>
 Heap<T>::~Heap(){
     delete heap;
-    delete mapping;
 }
 
 template <typename T>
@@ -32,6 +31,11 @@ void Heap<T>::swap(int i, int j){
 template <typename T>
 void Heap<T>::set_mapping(T correspondeces[]){
     mapping = correspondeces;
+}
+
+template <typename T>
+int Heap<T>::heapSize(){
+    return heapEnd;
 }
 
 template <typename T>
@@ -115,10 +119,13 @@ int Heap<T>::pop_top(){
 
 template <typename T>
 void Heap<T>::insert(int iElement){
-    heap[heapEnd] = iElement;
-    heapEnd++;
-    if(type == MIN) minHeapifyBottom(heapEnd - 1);
-    else     if(type == MAX) maxHeapifyBottom(heapEnd - 1);
+    if(heapEnd < maxSize){
+        heap[heapEnd] = iElement;
+        heapEnd++;
+        if(type == MIN) minHeapifyBottom(heapEnd - 1);
+        else if(type == MAX) maxHeapifyBottom(heapEnd - 1);
+
+    }
 }
 
 template <typename T>
@@ -133,6 +140,9 @@ void Heap<T>::print(){
     }
     cout << "]" << endl;
 }
+
+template class Heap<int>;
+
 /*
 int main(){
     Heap<int> heap = Heap<int>(90, MIN);
