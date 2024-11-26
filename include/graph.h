@@ -1,3 +1,6 @@
+#include <string>
+using namespace std;
+
 #ifndef GRAPH_H
 #define GRAPH_H
 
@@ -10,9 +13,9 @@ typedef struct EdgeNode {
     vertex endVertex;
 
     //important values for the crossing
-    int lenght;
+    float lenght;
     float maxSpeed;
-    int excavationCost;
+    float escavationCost;
 
     //building counts (should sum up to a value (function of the lenght))
     int nResidential;
@@ -21,9 +24,9 @@ typedef struct EdgeNode {
     int nTouristic;
 
     //ownership infos
-    int street;
+    string street;
     int streetOffset;
-    int region;
+    string region;
 } StreetSegment;
 
 typedef struct VertexNode {
@@ -49,7 +52,7 @@ public:
     StreetSegment* m_edges(vertex);
 
     bool hasSegment(vertex, vertex); //O(V)
-    void addSegment(vertex, vertex); //O(V)
+    void addSegment(vertex, vertex, EdgeNode*); //O(V)
     void removeSegment(vertex, vertex); //O(V)
 
     void print(); //O(V + E)
