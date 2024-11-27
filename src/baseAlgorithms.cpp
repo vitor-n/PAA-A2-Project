@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstdio>
+
 #include "graph.h"
 #include "heap.h"
 
@@ -14,6 +17,7 @@ void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[]){
     //root case
     distance[v0] = 0;
     parents[v0] = v0;
+
     //heap inicialization and insertion
     Heap heap = Heap<T>(m_numVertices, MIN);
     heap.set_mapping(distance);

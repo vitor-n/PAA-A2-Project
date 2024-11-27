@@ -5,13 +5,15 @@
 using namespace std;
 
 template <typename T>
-Heap<T>::Heap(int size, HeapType type): heap(nullptr), mapping(nullptr),
+Heap<T>::Heap(int size, HeapType type): heap(nullptr), mapping(nullptr), pos(nullptr),
                                         maxSize(size), heapEnd(0), type(type) {
     heap = new int[maxSize];
     mapping = new T[maxSize];
+    pos = new int[maxSize];
     for(int i = 0; i < maxSize; i++){
         heap[i] = 0;
         mapping[i] = i;
+        pos[i] = -1;
     }
 }
 
@@ -25,6 +27,8 @@ void Heap<T>::swap(int i, int j){
     T temp = heap[i];
     heap[i] = heap[j];
     heap[j] = temp;
+    pos[heap[i]] = i;
+    pos[heap[j]] = j;
 }
 
 
@@ -106,6 +110,7 @@ template <typename T>
 void Heap<T>::remove_top(){
     heapEnd--;
     swap(0, heapEnd);
+    pos[heap[heapEnd]] = -1;
     if(type == MIN) minHeapify(0);
     else if(type == MAX) maxHeapify(0);
 }
@@ -113,6 +118,7 @@ void Heap<T>::remove_top(){
 template <typename T>
 int Heap<T>::pop_top(){
     int value = get_top();
+    pos[value] = -1;
     remove_top();
     return value;
 }
@@ -120,11 +126,21 @@ int Heap<T>::pop_top(){
 template <typename T>
 void Heap<T>::insert(int iElement){
     if(heapEnd < maxSize){
-        heap[heapEnd] = iElement;
-        heapEnd++;
-        if(type == MIN) minHeapifyBottom(heapEnd - 1);
-        else if(type == MAX) maxHeapifyBottom(heapEnd - 1);
-
+        if(pos[iElement] == -1){ //insert element
+            heap[heapEnd] = iElement;
+            pos[iElement] = heapEnd;
+            heapEnd++;
+            if(type == MIN) minHeapifyBottom(heapEnd - 1);
+            else if(type == MAX) maxHeapifyBottom(heapEnd - 1);
+        } else { //update element
+            if(type == MIN) {
+                minHeapifyBottom(pos[iElement]);
+                minHeapify(pos[iElement]);
+            } else if(type == MAX) {
+                maxHeapifyBottom(pos[iElement]);
+                maxHeapify(pos[iElement]);
+            }
+        }
     }
 }
 
@@ -139,6 +155,9 @@ void Heap<T>::print(){
         cout << mapping[heap[i]] << " ";
     }
     cout << "]" << endl;
+    for(int i = 0; i < 7; i++){
+        cout << i << " " << pos[i] << endl;
+    }
 }
 
 template class Heap<int>;
@@ -180,27 +199,33 @@ int main(){
 int main () {
     int mapping[10000];
     for(int i = 0; i < 10000; i++){mapping[i] = 2147483647;}
-    mapping[202] = 600;
-    mapping[4] = 630;
-    mapping[301] = 660;
-    mapping[103] = 650;
-    mapping[400] = 580;
-    mapping[401] = 760;
+    mapping[0] = 900;
+    mapping[1] = 600;
+    mapping[2] = 630;
+    mapping[3] = 660;
+    mapping[4] = 650;
+    mapping[5] = 580;
+    mapping[6] = 760;
 
 
     Heap<int> heap = Heap<int>(10000, MIN);
     heap.set_mapping(mapping);
     heap.print();
-    heap.insert(202);
+    heap.insert(1);
     heap.insert(4);
-    heap.insert(301);
-    heap.insert(103);
+    heap.insert(3);
+    heap.insert(5);
     //heap.print();
-    heap.insert(400);
+    heap.insert(6);
+    heap.insert(2);
+    heap.insert(0);
     heap.print();
-    heap.pop_top();
-    heap.print();
-    heap.insert(401);
+    heap.remove_top();
+    heap.remove_top();
+    heap.insert(2);
+    mapping[4] = 1000;
+    heap.insert(4);
+    heap.insert(1);
     heap.print();
 }
 */
