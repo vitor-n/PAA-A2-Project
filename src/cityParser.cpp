@@ -8,6 +8,8 @@
 #include "graph.h"
 #include "cityParser.h"
 
+#define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
+
 using namespace std;
 
 const char CSVDELIMITER = ',';
@@ -105,5 +107,23 @@ CityGraph cityParser(string folderPath) {
 
 int main () {
     CityGraph cityGraph = cityParser("data/city-1");
-    cityGraph.print();
+
+    vertex g7Parents[10000];
+    int g7Distances[10000];
+
+    int v1 = 0;
+    int v2 = 7;
+
+    cityGraph.CPTDijkstra(v1, g7Parents, g7Distances);
+    
+    for(int i = 0; i < 10; i++){
+        cout << " " << g7Distances[i];
+    }
+    cout << endl;
+    printList(g7Parents, 10);
+    cout << g7Parents[105] << endl;
+    cout << g7Parents[104] << endl;
+    cout << g7Parents[102] << endl;
+    cout << g7Distances[v2] << endl;
+
 }

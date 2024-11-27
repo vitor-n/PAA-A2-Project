@@ -142,6 +142,7 @@ void Heap<T>::print(){
 }
 
 template class Heap<int>;
+template class Heap<float>;
 
 /*
 int main(){
