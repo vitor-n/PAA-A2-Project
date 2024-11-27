@@ -8,9 +8,11 @@ CXXFLAGS = -Wall -I $(IDIR)
 
 SRC = $(wildcard $(SRC_DIR)/*.cpp)
 
-ARGS = read data/city-1 -p
+ARGS = gen data/city-1 -p
 
 .PHONY: build help run clean
+
+all: build run
 
 build: $(SRC) ## Build the project
 	$(CXX) $(CXXFLAGS) -o out $(SRC)
@@ -24,5 +26,9 @@ graphgen: ## Generates the city graph WIP
 run: ## Run the project
 	./out
 
+test:
+	$(CXX) $(CXXFLAGS) -o test $(wildcard ./*.cpp)
+	./test
+
 clean: ## Clean created files
-	rm out
+	rm -f out $(wildcard ./*.exe) 
