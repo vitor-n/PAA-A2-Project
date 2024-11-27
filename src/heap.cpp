@@ -68,7 +68,7 @@ void Heap<T>::minHeapify(int iIndex){
     }
     if (i != iIndex){
         swap(i, iIndex);
-        maxHeapify(i);
+        minHeapify(i);
     }
 }
 
@@ -176,5 +176,48 @@ int main(){
     newHeap.print();
 }*/
 
+/*
+int main () {
+    int mapping[10000];
+    for(int i = 0; i < 10000; i++){mapping[i] = 2147483647;}
+    mapping[202] = 600;
+    mapping[4] = 630;
+    mapping[301] = 660;
+    mapping[103] = 650;
+    mapping[400] = 580;
+    mapping[401] = 760;
 
 
+    Heap<int> heap = Heap<int>(10000, MIN);
+    heap.set_mapping(mapping);
+    heap.print();
+    heap.insert(202);
+    heap.insert(4);
+    heap.insert(301);
+    heap.insert(103);
+    //heap.print();
+    heap.insert(400);
+    heap.print();
+    heap.pop_top();
+    heap.print();
+    heap.insert(401);
+    heap.print();
+}
+*/
+
+
+/*
+4/10000 [ 202 4 301 103 ]
+[ 600 630 660 650 ]
+5/10000 [ 400 202 301 103 4 ]
+[ 580 600 660 650 630 ]
+4/10000 [ 202 103 301 4 ]
+[ 600 650 660 630 ]
+5/10000 [ 202 103 301 4 401 ]
+[ 600 650 660 630 760 ]
+6/10000 [ 202 103 301 4 401 500 ]
+[ 600 650 660 630 760 730 ]
+5/10000 [ 103 401 301 4 500 ]
+[ 650 760 660 630 730 ]
+
+*/
