@@ -4,8 +4,18 @@
 #include "graph.h"
 #include "heap.h"
 
+template<typename T>
+T compareLenght(EdgeNode* node){
+    return node->lenght;
+}
+
+template<typename T>
+T compareCost(EdgeNode* node){
+    return node->escavationCost;
+}
+
 template <typename T>
-void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[]){
+void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[], T (*func)(EdgeNode*)){
     //inicialization
     const T INF = 2147483647;
     bool visited[m_numVertices];
@@ -31,8 +41,9 @@ void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[]){
         while(node){
             vertex v2 = node->endVertex;
             if(!visited[v2]){
-                if (distance[v1] + node->lenght < distance[v2]){
-                    distance[v2] = distance[v1] + node->lenght;
+                if (distance[v1] + func(node) < distance[v2]){
+                    distance[v2] = distance[v1] + func(node);
+                    cout << func(node) << endl;
                     parents[v2] = v1;
                     heap.insert(v2);
                 }
@@ -44,7 +55,7 @@ void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[]){
 }
 
 template <typename T>
-void CityGraph::CPTDijkstraRegion(vertex v0, T distance[], int region){
+void CityGraph::CPTDijkstraRegion(vertex v0, T distance[], int region, T (*func)(EdgeNode*)){
     //inicialization
     const T INF = 2147483647;
     bool visited[m_numVertices];
@@ -72,8 +83,8 @@ void CityGraph::CPTDijkstraRegion(vertex v0, T distance[], int region){
                 continue;
             }
             if (!visited[v2]) {
-                if (distance[v1] + node->lenght < distance[v2]){
-                    distance[v2] = distance[v1] + node->lenght;
+                if (distance[v1] + func(node) < distance[v2]){
+                    distance[v2] = distance[v1] + func(node);
                     heap.insert(v2);
                 }
             }
@@ -83,8 +94,13 @@ void CityGraph::CPTDijkstraRegion(vertex v0, T distance[], int region){
     }
 }
 
-template void CityGraph::CPTDijkstra(vertex, vertex[], int[]);
-template void CityGraph::CPTDijkstra(vertex, vertex[], float[]);
+template void CityGraph::CPTDijkstra(vertex, vertex[], int[], int(EdgeNode*));
+template void CityGraph::CPTDijkstra(vertex, vertex[], float[], float(EdgeNode*));
 
-template void CityGraph::CPTDijkstraRegion(vertex, int[], int);
-template void CityGraph::CPTDijkstraRegion(vertex, float[], int);
+template void CityGraph::CPTDijkstraRegion(vertex, int[], int, int(EdgeNode*));
+template void CityGraph::CPTDijkstraRegion(vertex, float[], int, float(EdgeNode*));
+
+template int compareLenght(EdgeNode*);
+template int compareCost(EdgeNode*);
+template float compareLenght(EdgeNode* node);
+template float compareCost(EdgeNode*);

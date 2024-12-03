@@ -25,7 +25,7 @@ int main () {
         for (int j = 0; j < city.numRegions(); j++) {
             if (i == j) { continue; }
 
-            city.CPTDijkstra(stations[i], path, cost);
+            city.CPTDijkstra(stations[i], path, cost, &compareCost);
             EdgeNode* edge = new EdgeNode;
             edge->lenght = cost[stations[j]];
             cout << i << " " << j << " " << edge->lenght << endl;

@@ -64,7 +64,7 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
     }
 
     for (auto it1 = cityGraph.regions[region]->begin(); it1.hasNext(); it1.next()) {
-        cityGraph.CPTDijkstraRegion(it1.value(), distances, region);
+        cityGraph.CPTDijkstraRegion(it1.value(), distances, region, &compareLenght);
         for (auto it2 = cityGraph.regions[region]->begin(); it2.hasNext(); it2.next()) {
             if (distances[it2.value()] > maxDist[it2.value()]) {
                 maxDist[it2.value()] = distances[it2.value()];

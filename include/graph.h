@@ -74,12 +74,15 @@ public:
     bool isTopological(); //theta(V + E)
     bool hasTopologicalOrder(int[]); //theta(V + E)
 
-    template <typename T> void CPTDijkstra(vertex, vertex[], T[]);
-    template <typename T> void CPTDijkstraRegion(vertex, T[], int region);
+    template <typename T> void CPTDijkstra(vertex, vertex[], T[], T);
+    template <typename T> void CPTDijkstraRegion(vertex, T[], int, T(EdgeNode*));
 
     CityGraph genMST();
 };
 
 typedef CityGraph Graph;
+
+template<typename T> T compareLenght(EdgeNode*);
+template<typename T> T compareCost(EdgeNode*);
 
 #endif
