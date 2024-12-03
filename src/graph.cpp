@@ -1,8 +1,11 @@
 #include <iostream>
 #include "graph.h"
+#include "linkedlist.h"
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
 using namespace std;
+
+typedef LinkedList Regions;
 
 StreetSegment* CityGraph::m_edges(vertex v){
     if(v >= 0 && v < m_numVertices){
@@ -11,13 +14,17 @@ StreetSegment* CityGraph::m_edges(vertex v){
     return nullptr;
 }
 
-CityGraph::CityGraph(int numVertices):
-m_numVertices(numVertices), m_numEdges(0), m_vertices(nullptr){
+CityGraph::CityGraph(int numVertices, int numRegions):
+m_numVertices(numVertices), m_numRegions(numRegions), m_numEdges(0), m_vertices(nullptr){
     m_vertices = new VertexNode*[numVertices]; //Initializes the list of edges for each vetex
+    regions = new Regions*[numRegions];
     for (vertex i = 0; i < numVertices; i++) {
         m_vertices[i] = new VertexNode;
         m_vertices[i]->region = -1;
         m_vertices[i]->segments = nullptr;
+    }
+    for (int i = 0; i < numRegions; i++) {
+        regions[i] = new Regions(i);
     }
 }
 
@@ -134,6 +141,14 @@ bool CityGraph::isSubGraph(CityGraph& H) {
         }
     }
     return true;
+}
+
+int CityGraph::numRegions() {
+    return m_numRegions;
+}
+
+int CityGraph::numNodes() {
+    return m_numVertices;
 }
 
 //O(n * V) because it checks, for each step in the path, if an edge exists. Checking the existence of an edge can take len(V)

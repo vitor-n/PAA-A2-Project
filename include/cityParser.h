@@ -12,5 +12,6 @@ std::map<std::string, int> configFromCFG(std::string folderPath);
 void nodesFromCSV(CityGraph& cityPath, std::string folderPath);
 void edgesFromCSV(CityGraph& cityGraph, std::string folderPath);
 CityGraph cityParser(std::string folderPath);
+void saveCityGraph(CityGraph& cityGraph, std::string folderPath);
 
 #endif

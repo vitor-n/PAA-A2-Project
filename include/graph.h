@@ -1,12 +1,15 @@
-#include <string>
-using namespace std;
-
 #ifndef GRAPH_H
 #define GRAPH_H
+
+#include <string>
+#include "linkedlist.h"
+
+using namespace std;
 
 typedef int vertex;
 typedef int street;
 typedef int region;
+typedef LinkedList Regions;
 
 typedef struct EdgeNode {
     EdgeNode* next;
@@ -24,9 +27,9 @@ typedef struct EdgeNode {
     int nTouristic;
 
     //ownership infos
-    string street;
+    int street;
     int streetOffset;
-    string region;
+    int region;
 } StreetSegment;
 
 typedef struct VertexNode {
@@ -40,12 +43,15 @@ typedef struct VertexNode {
 class CityGraph {
 private:
     int m_numVertices; //Immutable - how many crosses the city has
+    int m_numRegions;
     int m_numEdges; //Edges count will be track to easen life in some parts
     Crossing** m_vertices; //Two references because it's a list of nodes
-
 public:
+    Regions** regions; //List of regions
+    int numRegions();
+    int numNodes();
     //Class constructor and destructor
-    CityGraph(int numVertex);
+    CityGraph(int numVertex, int numRegions);
     ~CityGraph();
 
     Crossing** crossings();
@@ -69,6 +75,7 @@ public:
     bool hasTopologicalOrder(int[]); //theta(V + E)
 
     template <typename T> void CPTDijkstra(vertex, vertex[], T[]);
+    template <typename T> void CPTDijkstraRegion(vertex, T[], int region);
 };
 
 

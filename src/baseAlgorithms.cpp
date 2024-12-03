@@ -43,5 +43,48 @@ void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[]){
     }
 }
 
+template <typename T>
+void CityGraph::CPTDijkstraRegion(vertex v0, T distance[], int region){
+    //inicialization
+    const T INF = 2147483647;
+    bool visited[m_numVertices];
+    for(vertex v = 0; v < m_numVertices; v++){
+        distance[v] = INF;
+        visited[v] = false;
+    }
+    //root case
+    distance[v0] = 0;
+
+    //heap inicialization and insertion
+    Heap heap = Heap<T>(m_numVertices, MIN);
+    heap.set_mapping(distance);
+    heap.insert(v0);
+
+    while(heap.heapSize() != 0){
+        vertex v1 = heap.pop_top(); //removing v1 from heap
+        if (distance[v1] == INF) break;
+
+        EdgeNode* node = m_edges(v1);
+        while(node) {
+            vertex v2 = node->endVertex;
+            if (node->region != region) {
+                node = node->next;
+                continue;
+            }
+            if (!visited[v2]) {
+                if (distance[v1] + node->lenght < distance[v2]){
+                    distance[v2] = distance[v1] + node->lenght;
+                    heap.insert(v2);
+                }
+            }
+            node = node->next;
+        }
+        visited[v1] = true;
+    }
+}
+
 template void CityGraph::CPTDijkstra(vertex, vertex[], int[]);
 template void CityGraph::CPTDijkstra(vertex, vertex[], float[]);
+
+template void CityGraph::CPTDijkstraRegion(vertex, int[], int);
+template void CityGraph::CPTDijkstraRegion(vertex, float[], int);

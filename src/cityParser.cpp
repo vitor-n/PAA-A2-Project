@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <limits>
+#include <climits>
 
 #include "graph.h"
 #include "cityParser.h"
@@ -59,8 +61,8 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
     int numBuildings;
     int numResidentials;
     int maxSpeed;
-    string region;
-    string street;
+    int region;
+    int street;
     bool hasBusLane;
     float costToEscavate;
 
@@ -72,9 +74,12 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
         numBuildings = stoi(row[3]);
         numResidentials = stoi(row[4]);
         maxSpeed = stoi(row[5]);
-        region = row[6];
-        street = row[7];
+        region = stoi(row[6]);
+        street = stoi(row[7]);
         hasBusLane = stoi(row[8]);
+
+        cityGraph.regions[region]->add(node1);
+        cityGraph.regions[region]->add(node2);
 
         EdgeNode* node = new EdgeNode;
         node->lenght = length;
@@ -97,34 +102,10 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
 CityGraph cityParser(string folderPath) {
     map<string, int> cfg = configFromCFG(folderPath);
 
-    CityGraph cityGraph(cfg["num_nodes"]);
+    CityGraph cityGraph(cfg["num_nodes"], cfg["num_regions"]);
     
     nodesFromCSV(cityGraph, folderPath);
     edgesFromCSV(cityGraph, folderPath);
 
     return cityGraph;
 }
-
-int main () {
-    CityGraph cityGraph = cityParser("data/city-1");
-
-    vertex g7Parents[10000];
-    int g7Distances[10000];
-
-    int v1 = 0;
-    int v2 = 7;
-
-    cityGraph.CPTDijkstra(v1, g7Parents, g7Distances);
-    
-    for(int i = 0; i < 10; i++){
-        cout << " " << g7Distances[i];
-    }
-    cout << endl;
-    printList(g7Parents, 10);
-    cout << g7Parents[105] << endl;
-    cout << g7Parents[104] << endl;
-    cout << g7Parents[102] << endl;
-    cout << g7Distances[v2] << endl;
-
-}
-

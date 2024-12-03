@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "linkedList.h"
+#include "linkedlist.h"
 
 using namespace std;
 
@@ -45,4 +45,8 @@ int LinkedList::Iterator::next() {
     int value = current->value;
     current = current->next;
     return value;
+}
+
+LinkedList::Iterator LinkedList::begin() {
+    return LinkedList::Iterator(head);
 }

@@ -18,6 +18,7 @@ class GraphGenerator:
         self.edge_to_street = {}
         self.edges = []
         self.pos = {}
+        self.seeds = []
 
     def relabel_nodes(self):
         """Relabel nodes of the graph G to use linear indices."""
@@ -40,7 +41,7 @@ class GraphGenerator:
         mean_cost_meter = 300
         deviation_cost_meter = 100
 
-        diag_prob = 1
+        diag_prob = 0
 
         for i in range(m):
             for j in range(n):
@@ -114,6 +115,7 @@ class GraphGenerator:
         #random.seed(42)
         nodes = list(self.graph.nodes)
         node_seeds = random.sample(nodes, N)
+        self.seeds = node_seeds
         return node_seeds
 
     def grow_regions(self, node_seeds):
@@ -252,7 +254,7 @@ class GraphGenerator:
         with open(f"{folder}/city.cfg", "w") as f:
             f.write(f"rows={self.num_rows}\n")
             f.write(f"cols={self.num_cols}\n")
-            f.write(f"regions={self.num_regions}\n")
+            f.write(f"num_regions={self.num_regions}\n")
             f.write(f"num_nodes={len(self.graph.nodes)}\n")
             f.write(f"num_edges={len(self.graph.edges)}\n")
 
@@ -260,7 +262,7 @@ class GraphGenerator:
             fieldnames = ["node1", "node2", "length", "numBuildings", "numResidentials", "maxSpeed", "region", "street", "hasBusLane", "costToEscavate"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-            region_to_index = {region: i for i, region in enumerate(set(self.edge_to_region.values()))}
+            region_to_index = {region: i for i, region in enumerate(self.seeds)}
             
             writer.writeheader()
             for edge in self.edges:
@@ -272,7 +274,7 @@ class GraphGenerator:
                 writer.writerow({
                     "node1": edge[0],
                     "node2": edge[1],
-                    "region": data.get("region", "@"),
+                    "region": region_to_index[data.get("region", "@")],
                     "street": data.get("street", "@"),
                     "length": data.get("length", "@"),
                     "numBuildings": data.get("numBuildings", "@"),
@@ -307,7 +309,8 @@ class GraphGenerator:
             "#984ea3",  # purple
             "#999999",  # gray
             "#e41a1c",  # red
-            "#dede00"   # yellow
+            "#dede00",   # yellow
+            "#ff00ff"   # magenta
         ]
 
         unique_regions = list(set(colors))
@@ -316,6 +319,9 @@ class GraphGenerator:
 
         plt.figure(figsize=(6, 6))
         nx.draw(self.graph, self.pos, edge_color=edge_colors, node_size=0, width=3, with_labels=False)
+        metros = [4460, 4605, 6882, 9535, 8776, 2153, 2497, 363, 3622, 3564]
+        for metro in metros:
+            plt.plot(self.pos[metro][0], self.pos[metro][1], 'o', color="black", markersize=10)
         if self.num_rows < 20 and self.num_cols < 20:
             for edge in self.graph.edges():
                 sorted_edge = tuple(sorted(edge))

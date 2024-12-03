@@ -9,6 +9,7 @@ CXXFLAGS = -Wall -I $(IDIR)
 SRC = $(wildcard $(SRC_DIR)/*.cpp)
 
 ARGS = gen data/city-1 -p
+MODE = -p
 
 .PHONY: build help run clean
 
@@ -22,6 +23,9 @@ help:
 
 graphgen: ## Generates the city graph WIP
 	python extras/graphgen/graphgen.py $(ARGS)
+
+graphread: ## Reads the city graph WIP
+	python extras/graphgen/graphgen.py read data/city-1 -p
 
 run: ## Run the project
 	./out
