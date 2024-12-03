@@ -32,24 +32,27 @@ int timeDivisor(int time)
  * @brief Determines the adjusted speed for a street based on its ID, time-based traffic penalty and the street's maximum allowed speed.
  * 
  * @param street The street ID
+ * @param region The region ID
  * @param maxSpeed The maximun allowed speed for the street
  * @return double The djusted speed considering traffic and time.
  *
  * @details
  * - The calculation takes into account:
  * - The street's inherent traffic level (derived from its ID).
+ * - The region's modifier traffic level (derived form its ID).
  * - The penalty associated with the current hour of the day.
  * - A reduction factor that modifies the maximum speed based on these variables.
  */
-double detTraffic(int street, int maxSpeed)
+double detTraffic(int street, int region, int maxSpeed)
 {
     double howBusy = street % 12;
+    double regionPenalty = 0.2 * (region % 3) + 0.8;
 
     double now = getTime();
     double timePenalty = timeDivisor(now);
 
     double reductionFactor = (howBusy/12) * (timePenalty/10);
-    double result = maxSpeed * (1 - reductionFactor);
+    double result = regionPenalty * (maxSpeed * (1 - reductionFactor));
 
     return result;
 }
