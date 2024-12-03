@@ -76,7 +76,10 @@ public:
 
     template <typename T> void CPTDijkstra(vertex, vertex[], T[]);
     template <typename T> void CPTDijkstraRegion(vertex, T[], int region);
+
+    CityGraph genMST();
 };
 
+typedef CityGraph Graph;
 
 #endif
