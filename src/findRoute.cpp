@@ -81,7 +81,7 @@ EdgeNode* copyStreetInfo(CityGraph& city, int v1, int v2) {
     return nullptr;
 }
 
-void findRoute(CityGraph& city, int adress1[], int adress2[], int route[], float distance[]) {
+void findRoute(CityGraph& city, int adress1[], int adress2[], int route[], float distance[], float (*func)(EdgeNode*)) {
     int v1 = -1, v2 = -1;
     float dist_v1 = -1, dist_v2 = -1;
 
@@ -114,7 +114,7 @@ void findRoute(CityGraph& city, int adress1[], int adress2[], int route[], float
     city.addSegment(v3, vTemp2, edge3);
     city.addSegment(v4, vTemp2, edge4);
     
-    city.CPTDijkstra(vTemp1, route, distance, &compareLenght);
+    city.CPTDijkstra(vTemp1, route, distance, func);
 
     city.removeSegment(vTemp1, v1);
     city.removeSegment(vTemp1, v2);

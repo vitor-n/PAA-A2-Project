@@ -85,7 +85,7 @@ int main () {
     int v1x = city.numNodes()-1;
     int v2x = city.numNodes()-2;
 
-    findRoute(city, adress1, adress2, route, distance);
+    findRoute(city, adress1, adress2, route, distance, &compareLenght);
     cout << distance[v2x] << endl;
 
     return 0;
