@@ -19,6 +19,8 @@ class GraphGenerator:
         self.edges = []
         self.pos = {}
         self.seeds = []
+        self.subway = nx.Graph()
+        self.subway_stations = []
 
     def relabel_nodes(self):
         """Relabel nodes of the graph G to use linear indices."""
@@ -33,7 +35,7 @@ class GraphGenerator:
             self.graph.edges[node1, node2]["length"] = length
             self.graph.edges[node1, node2]["numBuildings"] = num_buildings
             self.graph.edges[node1, node2]["numResidentials"] = num_residentials
-            self.graph.edges[node1, node2]["costToEscavate"] = cost_to_escavate
+            self.graph.edges[node1, node2]["escavationCost"] = cost_to_escavate
 
         len_row = np.random.randint(5, 20, size=m) * 10
         len_col = np.random.randint(5, 20, size=n) * 10
@@ -61,7 +63,7 @@ class GraphGenerator:
                     num_buildings = len_row[i] // 10 - np.random.randint(0, len_row[i] // 10 - 1)
                     self.graph.edges[edge]["numBuildings"] = num_buildings
                     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
-                    self.graph.edges[edge]["costToEscavate"] = len_row[i] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
+                    self.graph.edges[edge]["escavationCost"] = len_row[i] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
                     
                     self.edges.append(edge)
                     self.edges.append((node2, node1))
@@ -77,7 +79,7 @@ class GraphGenerator:
                     num_buildings = len_col[j] // 10 - np.random.randint(0, len_col[j] // 10 - 1)
                     self.graph.edges[edge]["numBuildings"] = num_buildings
                     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
-                    self.graph.edges[edge]["costToEscavate"] = len_col[j] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
+                    self.graph.edges[edge]["escavationCost"] = len_col[j] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
                     self.edges.append(edge)
                     self.edges.append((node2, node1))
 
@@ -92,7 +94,7 @@ class GraphGenerator:
                     num_buildings = len_col[j] // 10 - np.random.randint(0, len_col[j] // 10 - 1)
                     self.graph.edges[edge]["numBuildings"] = num_buildings
                     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
-                    self.graph.edges[edge]["costToEscavate"] = np.sqrt(len_row[i]**2 + len_col[j]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
+                    self.graph.edges[edge]["escavationCost"] = np.sqrt(len_row[i]**2 + len_col[j]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
                     self.edges.append(edge)
                     self.edges.append((node2, node1))
 
@@ -105,7 +107,7 @@ class GraphGenerator:
                     num_buildings = min(len_row[i], len_col[j-1]) // 10 - np.random.randint(0, min(len_row[i], len_col[j-1]) // 10 - 1)
                     self.graph.edges[edge]["numBuildings"] = num_buildings
                     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5, num_buildings//2)
-                    self.graph.edges[edge]["costToEscavate"] = np.sqrt(len_row[i]**2 + len_col[j-1]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
+                    self.graph.edges[edge]["escavationCost"] = np.sqrt(len_row[i]**2 + len_col[j-1]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
 
                     self.edges.append(edge)
                     self.edges.append((node2, node1))
@@ -248,6 +250,23 @@ class GraphGenerator:
                 y = float(row["y"])
                 self.pos[node] = (x, y)
 
+        city_subway = Path(f"{folder}city-subway.csv")
+        if city_subway.is_file():
+            with open(city_subway, "r", newline="") as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    node1 = int(row["node1"])
+                    node2 = int(row["node2"])
+                    self.subway.add_edge(node1, node2)
+
+        city_subway_stations = Path(f"{folder}subway-stations.csv")
+        if city_subway_stations.is_file():
+            with open(city_subway_stations, "r", newline="") as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    node = int(row["station"])
+                    self.subway_stations.append(node)
+
     def save(self, folder):
         os.makedirs(os.path.dirname(folder), exist_ok=True)
 
@@ -259,7 +278,7 @@ class GraphGenerator:
             f.write(f"num_edges={len(self.graph.edges)}\n")
 
         with open(f"{folder}/city-edges.csv", "w", newline="") as csvfile:
-            fieldnames = ["node1", "node2", "length", "numBuildings", "numResidentials", "maxSpeed", "region", "street", "hasBusLane", "costToEscavate"]
+            fieldnames = ["node1", "node2", "length", "numBuildings", "numResidentials", "maxSpeed", "region", "street", "hasBusLane", "escavationCost"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
             region_to_index = {region: i for i, region in enumerate(self.seeds)}
@@ -281,7 +300,7 @@ class GraphGenerator:
                     "numResidentials": data.get("numResidentials", "@"),
                     "maxSpeed": data.get("maxSpeed", "@"),
                     "hasBusLane": data.get("hasBusLane", 0),
-                    "costToEscavate": data.get("costToEscavate", "@")
+                    "escavationCost": data.get("escavationCost", "@")
                 })
 
         with open(f"{folder}/city-nodes.csv", "w", newline="") as csvfile:
@@ -319,9 +338,11 @@ class GraphGenerator:
 
         plt.figure(figsize=(6, 6))
         nx.draw(self.graph, self.pos, edge_color=edge_colors, node_size=0, width=3, with_labels=False)
-        metros = [4460, 4605, 6882, 9535, 8776, 2153, 2497, 363, 3622, 3564]
-        for metro in metros:
-            plt.plot(self.pos[metro][0], self.pos[metro][1], 'o', color="black", markersize=10)
+        nx.draw(self.subway, self.pos, edge_color="black", node_size=0, width=3, with_labels=False)
+
+        for station in self.subway_stations:
+            plt.plot(self.pos[station][0], self.pos[station][1], 'o', color="black", markersize=10)
+
         if self.num_rows < 20 and self.num_cols < 20:
             for edge in self.graph.edges():
                 sorted_edge = tuple(sorted(edge))

@@ -11,8 +11,8 @@ class Heap {
 private:
     //important things to store
     int* heap;
-    int* pos;
     T* mapping;
+    int* pos;
     int maxSize;
     int heapEnd;
     HeapType type;

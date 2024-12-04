@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
 #include <limits>
 #include "graph.h"
 #include "cityParser.h"
@@ -27,6 +30,15 @@ int main () {
 
     subwayFull.print();
     subwayMST.print();
+    
+    ofstream outFile1("data/city-1/city-subway.csv");
+    ofstream outFile2("data/city-1/subway-stations.csv");
+
+    outFile2 << "station" << endl;
+    for (int i = 0; i < city.numRegions(); i++) {
+        outFile2 << stations[i] << endl;
+    }
+    outFile1 << "node1,node2" << endl;
 
     for(int i = 0; i < subwayMST.numNodes(); i++){
         EdgeNode* node = subwayMST.m_edges(i);
@@ -38,9 +50,12 @@ int main () {
             }
             int v = stations[j];
             cout << "Region " << i << " to " << node->endVertex << " [ ";
+            int last = v;
             while(path[i][v] != v){
                 cout << v << " ";
                 v = path[i][v];
+                if (last != v) { outFile1 << last << "," << v << endl; }
+                last = v;
             }
             cout << v << " ]" << endl;
             node = node->next;
