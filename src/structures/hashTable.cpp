@@ -83,6 +83,7 @@ void HashTable<T>::remove(unsigned key){
 }
 
 template class HashTable<int>;
+template class HashTable<bool>;
 
 //TODO: adicionar algortimos de resize da hashtable
 

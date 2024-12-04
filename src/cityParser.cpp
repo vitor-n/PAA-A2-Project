@@ -89,6 +89,7 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
         node->maxSpeed = maxSpeed;
         node->escavationCost = escavationCost;
 
+        node->nBuildings = numBuildings;
         node->nComercial = numResidentials - numBuildings;
         node->nResidential = numResidentials;
         node->nIndustrial = 0;

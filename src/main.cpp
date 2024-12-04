@@ -8,11 +8,13 @@
 #include "genSubway.h"
 #include "heap.h"
 
+#include "hashTable.h"
+
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
 using namespace std;
 
-void findEdge(CityGraph& city, int region, int street, int number, int& v1, int& v2, int& dist_v1, int& dist_v2) {
+void findEdge(CityGraph& city, int region, int street, int number, int& v1, int& v2, float& dist_v1, float& dist_v2) {
     int v = -1;
     int startNode = -1;
     int i = 0;
@@ -28,7 +30,10 @@ void findEdge(CityGraph& city, int region, int street, int number, int& v1, int&
             node = node->next;
         }
     }
-    
+
+    HashTable<bool> visited = HashTable<bool>(20);
+    int nBuildings = 0;
+
     if (startNode == -1) {
         cout << "Couldn't locate: ";
         cout << "<ZIP: " << region << " Street: " << street << " N: " << number << ">" <<  endl;
@@ -36,12 +41,32 @@ void findEdge(CityGraph& city, int region, int street, int number, int& v1, int&
         return;
     } else {
         EdgeNode* node = city.m_edges(startNode);
-        while(node){
-            if (node->street != street) { 
+        int lastNode = startNode;
+        while (node) {
+            if (node->street != street and visited.get(lastNode) != nullptr) { 
                 node = node->next;
                 continue;
             }
+            visited.set(startNode, true);
+
+            if (nBuildings <= number <= nBuildings + node->nBuildings) {
+                v1 = lastNode;
+                v2 = node->endVertex;
+                dist_v1 = (number - nBuildings) * (node->lenght / node->nBuildings);
+                dist_v2 = node->lenght - dist_v1;
+                return;
+            }
+
+            nBuildings += node->nBuildings;
+            visited.set(node->endVertex, true);
+            node = city.m_edges(node->endVertex);
+            lastNode = startNode;
             node = node->next;
+        }
+        if (number > nBuildings) {
+            cout << "Couldn't locate: ";
+            cout << "<ZIP: " << region << " Street: " << street << " N: " << number << ">" <<  endl;
+            cout << "This street numbers goes from 1 to" << nBuildings << endl;
         }
     }
 }
@@ -96,7 +121,12 @@ int main () {
         }
     }
 
-    findEdge(city, 2, 235, 1);
+    int v1 = -1, v2 = -1;
+    float dist_v1 = -1, dist_v2 = -1;
+
+    findEdge(city, 6, 0, 10, v1, v2, dist_v1, dist_v2);
+
+    cout << "v1: " << v1 << " v2: " << v2 << " dist_v1: " << dist_v1 << " dist_v2: " << dist_v2 << endl;
 
     return 0;
 }

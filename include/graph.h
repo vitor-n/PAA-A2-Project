@@ -21,6 +21,7 @@ typedef struct EdgeNode {
     float escavationCost;
 
     //building counts (should sum up to a value (function of the lenght))
+    int nBuildings;
     int nResidential;
     int nComercial;
     int nIndustrial;
