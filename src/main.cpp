@@ -7,6 +7,7 @@
 #include "cityParser.h"
 #include "genSubway.h"
 #include "heap.h"
+#include "times.h"
 
 #include "hashTable.h"
 
@@ -85,7 +86,7 @@ int main () {
         genSubwayStations(city, i, stations);
     }
 
-    Graph subwayMST = genSubwayLines(city, subwayFull, stations, path);
+    Graph subwayMST = genSubwayLines(city, subwayFull, stations, path, true);
 
     subwayFull.print();
     subwayMST.print();
@@ -109,7 +110,7 @@ int main () {
             }
             int v = stations[j];
             cout << "Region " << i << " to " << node->endVertex;
-            cout << " (cost: " << subwayMST->lenght << ") [ ";
+            cout << " (cost: " << node->lenght << ") [ ";
             int last = v;
             while(path[i][v] != v){
                 cout << v << " ";
@@ -129,5 +130,6 @@ int main () {
 
     cout << "v1: " << v1 << " v2: " << v2 << " dist_v1: " << dist_v1 << " dist_v2: " << dist_v2 << endl;
 
+    getTimes(1, 2);
     return 0;
 }

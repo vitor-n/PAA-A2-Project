@@ -4,6 +4,6 @@
 #include "graph.h"
 
 void genSubwayStations(CityGraph&, int, int[]);
-Graph genSubwayLines(CityGraph&, Graph&, int[], int**);
+Graph genSubwayLines(CityGraph&, Graph&, int[], int**, bool);
 
 #endif

@@ -29,7 +29,7 @@ void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[], T (*func)
     parents[v0] = v0;
 
     //heap inicialization and insertion
-    Heap heap = Heap<T>(m_numVertices, MIN);
+    Heap<T> heap = Heap<T>(m_numVertices, MIN);
     heap.set_mapping(distance);
     heap.insert(v0);
 
@@ -66,7 +66,7 @@ void CityGraph::CPTDijkstraRegion(vertex v0, T distance[], int region, T (*func)
     distance[v0] = 0;
 
     //heap inicialization and insertion
-    Heap heap = Heap<T>(m_numVertices, MIN);
+    Heap<T> heap = Heap<T>(m_numVertices, MIN);
     heap.set_mapping(distance);
     heap.insert(v0);
 

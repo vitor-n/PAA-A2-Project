@@ -22,7 +22,7 @@ Graph Graph::genMSTPrim() {
     distance[0] = 0;
     parent[0] = -1;
 
-    Heap heap = Heap<int>(m_numVertices, MIN);
+    Heap<int> heap = Heap<int>(m_numVertices, MIN);
     heap.set_mapping(distance);
     heap.insert(0);
 
@@ -87,17 +87,18 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
     stations[region] = bestNode;
 }
 
-Graph genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **path){
+Graph genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **path, bool bPrint){
     int cost[city.numNodes()];
 
     for (int i = 0; i < city.numRegions(); i++) {
         city.CPTDijkstra(stations[i], path[i], cost, &compareCost);
         for (int j = 0; j < city.numRegions(); j++) {
-            if (i == j) { continue; }
+            if (i == j) continue; 
 
             EdgeNode* edge = new EdgeNode;
             edge->lenght = cost[stations[j]];
-            cout << i << " " << j << " " << edge->lenght << endl;
+
+            if (bPrint) cout << i << " " << j << " " << edge->lenght << endl;
 
             subwayFull.addSegment(i, j, edge);
         }

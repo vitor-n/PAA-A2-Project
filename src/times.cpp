@@ -6,6 +6,7 @@
 #include "cityParser.h"
 #include "genSubway.h"
 #include "heap.h"
+#include "times.h"
 
 using namespace std;
 
@@ -13,35 +14,46 @@ using chrono::high_resolution_clock;
 using chrono::duration_cast;
 using chrono::nanoseconds;
 
+void getTimes(int numCities, const long int N) {
 
-#define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
+    for (int numCity = 1; numCity < numCities + 1; numCity++){
+        string strNumCity = to_string(numCity);
+        string strPath = "data/times/city-" + strNumCity + ".csv";
+        ofstream outputFile(strPath, ios::out | ios::trunc);
+        cout << strPath << endl;
+        outputFile << "genSubway" << endl;
 
+        CityGraph city = cityParser("data/city-" + strNumCity);
 
-void get_times(string numCity, string strFILENAME) {
-    CityGraph city = cityParser("data/city-" + numCity);
-    Graph subwayFull = Graph(city.numRegions(), 0);
+        Graph subwayFull = Graph(city.numRegions(), 0);
 
-    auto timeStart1 = high_resolution_clock::now();
+        for (int i = 0; i < N; i++){
 
-    int stations[city.numRegions()];
+            // Começa a contagem do tempo da primeira operação
+            auto timeStart1 = high_resolution_clock::now();
 
-    for (int i = 0; i < city.numRegions(); i++) {
-        genSubwayStations(city, i, stations);
+            int stations[city.numRegions()];
+            
+            int** path = new int*[city.numRegions()];
+
+            for (int i = 0; i < city.numRegions(); i++){
+                path[i] = new int[city.numNodes()];
+                genSubwayStations(city, i, stations);
+            }
+
+            Graph subwayMST = genSubwayLines(city, subwayFull, stations, path, false);
+            // Encerra a contagem de tempo da primeira operação
+            auto timeStop1 = high_resolution_clock::now();
+
+            auto timeDuration1 = duration_cast<nanoseconds>(timeStop1 - timeStart1);
+
+            outputFile << timeDuration1.count() << endl;
+
+            for (int i = 0; i < city.numRegions(); i++) delete path[i];
+
+            delete[] path;
+            delete &subwayMST;
+        }
+        outputFile.close();
     }
-
-    int path;
-
-    Graph subwayMST = genSubwayLines(city, subwayFull, stations, path);
-
-    auto timeStop1 = high_resolution_clock::now();
-
-    ofstream outputFile(strFILENAME, ios::out | ios::trunc);
-
-    outputFile << "Tempo operação 1" << endl;
-
-    auto timeDuration1 = duration_cast<nanoseconds>(timeStop1 - timeStart1);
-
-    outputFile << timeDuration1.count() << endl;
-
-    outputFile.close();
 }
