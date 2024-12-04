@@ -64,10 +64,19 @@ int main(){
     CityGraph city = cityParser("data/city-1");
     Graph busFull = Graph(city.numRegions(), 0);
 
+    //GERAÇÃO BUS FULL
     int points[city.numRegions()];
     int** path = new int*[city.numRegions()];
     for (int i = 0; i < city.numRegions(); i++){
         path[i] = new int[city.numNodes()];
+    }
+
+
+    float distMatrix[city.numRegions()][city.numRegions()];
+    for(int i = 0; i < city.numRegions(); i++){
+        for(int j = 0; j < city.numRegions(); j++){
+            distMatrix[i][j] = -1;
+        }
     }
 
     for (int i = 0; i < city.numRegions(); i++) {
@@ -85,38 +94,49 @@ int main(){
             edge->lenght = cost[points[j]];
 
             cout << i << " " << j << " " << edge->lenght << endl;
-
+            distMatrix[i][j] = edge->lenght;
             busFull.addSegment(i, j, edge);
         }
     }
 
-    Graph busLine = Graph(city.numRegions(), 0);
-
+    //GERAÇÃO BUSLINE
+    int busLine[city.numRegions()];
     bool visited[city.numRegions()];
-    for(int i = 0; i < city.numRegions(); i++) {visited[i] = false;}
+    for(int i = 0; i < city.numRegions(); i++) {busLine[i] = -1; visited[i] = false;}
     int edgeCount = 0;
 
     int v = 0;
     cout << v << " ";
+    busLine[v] = 0;
     visited[v] = true;
+    float totalDist = 0;
+
     while(edgeCount != city.numRegions() - 1){
         int best = -1;
         int minDist = INF;
-        EdgeNode* edge = busFull.m_edges(v);
-        while(edge){
-            if(!visited[edge->endVertex] && edge->lenght < minDist){
-                minDist = edge->lenght;
-                best = edge->endVertex;
+
+        for(int other = 0; other < city.numRegions(); other++){
+            if(!visited[other] && distMatrix[v][other] < minDist){
+                minDist = distMatrix[v][other];
+                best = other;
             }
-            edge = edge->next;
         }
-        visited[best] = true;
-        EdgeNode* addEdge = new EdgeNode;
-        addEdge->lenght = minDist;
-        busLine.addSegment(v, best, addEdge);
-        v = best;
-        cout << "(" << minDist << ") " << v << " ";
         edgeCount++;
+        busLine[edgeCount] = best;
+        totalDist += minDist;
+        v = best;
+        visited[v] = true;
+        cout << "(" << minDist << ") " << v << " ";
     }
-    cout << endl;
+    cout << endl << "Total cost: " << totalDist << endl;
+    for(int i = 0; i < city.numRegions() - 1; i++){
+        for(int j = i + 1; j < city.numRegions(); j++){
+            j =
+            int deltaCost = distMatrix[]
+        }
+    }
+
+    busFull.print();
+
+
 }
