@@ -3,8 +3,19 @@
 #include "graph.h"
 #include "hashTable.h"
 #include "findRoute.h"
+#include "trafficAPI.h"
 
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
+
+float compareSpeed(EdgeNode* node) {
+    double speed = node->maxSpeed;
+    int street = node->street;
+    int region = node->region;
+    speed = detTraffic(street, region, speed);
+    cout << speed << endl;
+    cout << node->lenght << endl;
+    return (node->lenght )/ (speed / 3.6);
+}
 
 void findEdge(CityGraph& city, int region, int street, int number, int& v1, int& v2, float& dist_v1, float& dist_v2) {
     int v = -1;

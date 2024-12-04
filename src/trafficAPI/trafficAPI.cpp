@@ -2,6 +2,8 @@
 #include <chrono>
 #include <ctime>
 
+#include "trafficAPI.h"
+
 using namespace std;
 
 /**

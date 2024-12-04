@@ -7,7 +7,7 @@ IDIR = include
 CXX = g++
 CXXFLAGS = -Wall -I $(IDIR)
 
-SRC = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp)
+SRC = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(SRC_DIR)/trafficAPI/*.cpp)
 
 ARGS = gen data/city-1 -p
 MODE = -p
