@@ -156,7 +156,7 @@ class GraphGenerator:
 
         max_speed = np.random.choice(max_speed_list, p=max_speed_weights)
 
-        def update_street(node, neighbor, street_id, last_region, curr_len, curr_max_len, max_speed):
+        def update_street(node, neighbor, street_id, last_region, curr_len, curr_max_len, max_speed, start_node):
             if self.edge_to_region[(node, neighbor)] == last_region and curr_len < curr_max_len:
                 curr_len += 1
             else:
@@ -164,12 +164,14 @@ class GraphGenerator:
                 curr_max_len = random.randint(1, max_len)
                 max_speed = np.random.choice(max_speed_list, p=max_speed_weights)
                 curr_len = 0
+                start_node = node
             self.edge_to_street[(node, neighbor)] = street_id
             self.graph.edges[(node, neighbor)]["maxSpeed"] = max_speed
             self.graph.edges[(node, neighbor)]["street"] = street_id
+            self.graph.edges[(node, neighbor)]["streetStart"] = start_node
             last_region = self.edge_to_region[(node, neighbor)]
 
-            return street_id, last_region, curr_len, curr_max_len, max_speed
+            return street_id, last_region, curr_len, curr_max_len, max_speed, start_node
         
         street_id_h = 0
         street_id_v = 1
@@ -177,24 +179,26 @@ class GraphGenerator:
         curr_len = 0
         curr_max_len = random.randint(1, max_len)
         last_region = self.edge_to_region[(0, 1)]
+        start_node = 0
         for i in range(self.num_rows):
             for j in range(self.num_cols-1):
                 node = i * self.num_cols + j
                 right_node = i * self.num_cols + (j + 1)
-
-                info = update_street(node, right_node, street_id_h, last_region, curr_len, curr_max_len, max_speed)
-                street_id_h, last_region, curr_len, curr_max_len, max_speed = info
+                
+                info = update_street(node, right_node, street_id_h, last_region, curr_len, curr_max_len, max_speed, start_node)
+                street_id_h, last_region, curr_len, curr_max_len, max_speed, start_node = info
 
         curr_len = 0
         curr_max_len = random.randint(1, max_len)
         last_region = self.edge_to_region[(0, self.num_cols)]
+        start_node = 0
         for j in range(self.num_cols):
             for i in range(self.num_rows-1):
                 node = i * self.num_cols + j
                 down_node = (i + 1) * self.num_cols + j
 
-                info = update_street(node, down_node, street_id_v, last_region, curr_len, curr_max_len, max_speed)
-                street_id_v, last_region, curr_len, curr_max_len, max_speed = info
+                info = update_street(node, down_node, street_id_v, last_region, curr_len, curr_max_len, max_speed, start_node)
+                street_id_v, last_region, curr_len, curr_max_len, max_speed, start_node = info
 
     def create_subgraphs(self):
         region_edges = {}
@@ -278,7 +282,7 @@ class GraphGenerator:
             f.write(f"num_edges={len(self.graph.edges)}\n")
 
         with open(f"{folder}/city-edges.csv", "w", newline="") as csvfile:
-            fieldnames = ["node1", "node2", "length", "numBuildings", "numResidentials", "maxSpeed", "region", "street", "hasBusLane", "escavationCost"]
+            fieldnames = ["node1", "node2", "length", "numBuildings", "numResidentials", "maxSpeed", "region", "street", "hasBusLane", "escavationCost", "streetStart"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
             region_to_index = {region: i for i, region in enumerate(self.seeds)}
@@ -300,7 +304,8 @@ class GraphGenerator:
                     "numResidentials": data.get("numResidentials", "@"),
                     "maxSpeed": data.get("maxSpeed", "@"),
                     "hasBusLane": data.get("hasBusLane", 0),
-                    "escavationCost": data.get("escavationCost", "@")
+                    "escavationCost": data.get("escavationCost", "@"),
+                    "streetStart": data.get("streetStart", "@")
                 })
 
         with open(f"{folder}/city-nodes.csv", "w", newline="") as csvfile:

@@ -12,6 +12,40 @@
 
 using namespace std;
 
+void findEdge(CityGraph& city, int region, int street, int number, int& v1, int& v2, int& dist_v1, int& dist_v2) {
+    int v = -1;
+    int startNode = -1;
+    int i = 0;
+    for (auto it = city.regions[region]->begin(); it.hasNext(); it.next()) {
+        v = it.value();
+        
+        EdgeNode* node = city.m_edges(v);
+        while(node){
+            if (node->street == street) { 
+                startNode = v;
+                break;
+             }
+            node = node->next;
+        }
+    }
+    
+    if (startNode == -1) {
+        cout << "Couldn't locate: ";
+        cout << "<ZIP: " << region << " Street: " << street << " N: " << number << ">" <<  endl;
+        cout << "Consider taking a look at the city map (city-edges.csv)" << endl;
+        return;
+    } else {
+        EdgeNode* node = city.m_edges(startNode);
+        while(node){
+            if (node->street != street) { 
+                node = node->next;
+                continue;
+            }
+            node = node->next;
+        }
+    }
+}
+
 int main () {
     CityGraph city = cityParser("data/city-1");
     Graph subwayFull = Graph(city.numRegions(), 0);
@@ -40,7 +74,7 @@ int main () {
     }
     outFile1 << "node1,node2" << endl;
 
-    for(int i = 0; i < subwayMST.numNodes(); i++){
+    for (int i = 0; i < subwayMST.numNodes(); i++) {
         EdgeNode* node = subwayMST.m_edges(i);
         while(node){
             int j = node->endVertex;
@@ -61,6 +95,8 @@ int main () {
             node = node->next;
         }
     }
+
+    findEdge(city, 2, 235, 1);
 
     return 0;
 }

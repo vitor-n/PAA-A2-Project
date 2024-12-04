@@ -28,6 +28,7 @@ typedef struct EdgeNode {
 
     //ownership infos
     int street;
+    int streetStart;
     int streetOffset;
     int region;
 } StreetSegment;

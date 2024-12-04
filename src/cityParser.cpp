@@ -65,6 +65,7 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
     int street;
     bool hasBusLane;
     float escavationCost;
+    int streetStart;
 
     while (getline(file, line)) {
         row = split(line, CSVDELIMITER);
@@ -78,6 +79,7 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
         street = stoi(row[7]);
         hasBusLane = stoi(row[8]);
         escavationCost = stof(row[9]);
+        streetStart = stoi(row[10]);
 
         cityGraph.regions[region]->add(node1);
         cityGraph.regions[region]->add(node2);
@@ -95,6 +97,7 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
         node->region = region;
         node->street = street;
         node->streetOffset = 0;
+        node->streetStart = streetStart;
 
         cityGraph.addSegment(node1, node2, node);
     }
