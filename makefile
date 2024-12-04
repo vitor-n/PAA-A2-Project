@@ -1,12 +1,13 @@
 .DEFAULT_GOAL := help
 
 SRC_DIR = src
+STRUCT_DIR = src/structures
 IDIR = include
 
 CXX = g++
 CXXFLAGS = -Wall -I $(IDIR)
 
-SRC = $(wildcard $(SRC_DIR)/*.cpp)
+SRC = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp-)
 
 ARGS = gen data/city-1 -p
 MODE = -p
