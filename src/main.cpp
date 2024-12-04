@@ -83,7 +83,8 @@ int main () {
                 continue;
             }
             int v = stations[j];
-            cout << "Region " << i << " to " << node->endVertex << " [ ";
+            cout << "Region " << i << " to " << node->endVertex;
+            cout << " (cost: " << subwayMST->lenght << ") [ ";
             int last = v;
             while(path[i][v] != v){
                 cout << v << " ";
