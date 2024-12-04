@@ -104,6 +104,7 @@ void CityGraph::removeSegment(vertex v1, vertex v2){
                     m_numEdges--;
                     break;
                 }
+                node = node->next;
             }
         }
     }
