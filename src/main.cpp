@@ -18,23 +18,7 @@ int main () {
         genSubwayStations(city, i, stations);
     }
 
-    int cost[city.numNodes()];
-    int path[city.numNodes()];
-
-    for (int i = 0; i < city.numRegions(); i++) {
-        for (int j = 0; j < city.numRegions(); j++) {
-            if (i == j) { continue; }
-
-            city.CPTDijkstra(stations[i], path, cost, &compareCost);
-            EdgeNode* edge = new EdgeNode;
-            edge->lenght = cost[stations[j]];
-            cout << i << " " << j << " " << edge->lenght << endl;
-
-            subwayFull.addSegment(i, j, edge);
-        }
-    }
-
-    Graph subwayMST = subwayFull.genMST();
+    Graph subwayMST = genSubwayLines(city, subwayFull, stations);
 
     subwayFull.print();
     subwayMST.print();

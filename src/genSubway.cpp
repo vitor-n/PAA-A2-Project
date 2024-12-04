@@ -4,14 +4,15 @@
 #include "graph.h"
 #include "genSubway.h"
 #include "heap.h"
+#include "cityParser.h"
 
-Graph Graph::genMST() {
+Graph Graph::genMSTPrim() {
     Graph mst = Graph(m_numVertices, 0);
     const int INF = 2147483647;
     int distance[m_numVertices];
     bool visited[m_numVertices];
     int parent[m_numVertices];
-    
+
     for (vertex v = 0; v < m_numVertices; v++) {
         distance[v] = INF;
         visited[v] = false;
@@ -85,3 +86,26 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
     cout << "SubwayStation " << region << ": " << bestNode << endl;
     stations[region] = bestNode;
 }
+
+Graph genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[]){
+    int cost[city.numNodes()];
+    int path[city.numNodes()];
+
+    for (int i = 0; i < city.numRegions(); i++) {
+        city.CPTDijkstra(stations[i], path, cost, &compareCost);
+        for (int j = 0; j < city.numRegions(); j++) {
+            if (i == j) { continue; }
+
+            EdgeNode* edge = new EdgeNode;
+            edge->lenght = cost[stations[j]];
+            cout << i << " " << j << " " << edge->lenght << endl;
+
+            subwayFull.addSegment(i, j, edge);
+        }
+    }
+
+    Graph subwayMST = subwayFull.genMSTPrim();
+    return subwayMST;
+}
+
+

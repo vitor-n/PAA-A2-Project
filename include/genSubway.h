@@ -3,6 +3,7 @@
 
 #include "graph.h"
 
-void genSubwayStations(CityGraph& cityGraph, int region, int stations[]);
+void genSubwayStations(CityGraph&, int, int[]);
+Graph genSubwayLines(CityGraph&, Graph&, int[]);
 
 #endif
