@@ -17,7 +17,8 @@ using namespace std;
 
 
 int main () {
-/*    CityGraph city = cityParser("data/city-1");
+     CityGraph city = cityParser("data/city-1");
+/*  CityGraph city = cityParser("data/city-1");
     Graph subwayFull = Graph(city.numRegions(), 0);
 
     int stations[city.numRegions()];
@@ -30,7 +31,7 @@ int main () {
         genSubwayStations(city, i, stations);
     }
 
-    Graph subwayMST = genSubwayLines(city, subwayFull, stations, path, true);
+    Graph subwayMST = *genSubwayLines(city, subwayFull, stations, path, true);
 
     subwayFull.print();
     subwayMST.print();
@@ -73,7 +74,19 @@ int main () {
     findEdge(city, 6, 0, 18, v1, v2, dist_v1, dist_v2);
 
     cout << "v1: " << v1 << " v2: " << v2 << " dist_v1: " << dist_v1 << " dist_v2: " << dist_v2 << endl;
-*/
-    getTimes(1, 12);
+*/  
+    int adress1[] = {18, 0, 5};
+    int adress2[] = {13, 6091, 19};
+
+    int parents[city.numNodes()];
+    int route[city.numNodes()];
+    float distance[city.numNodes()];
+
+    int v1x = city.numNodes()-1;
+    int v2x = city.numNodes()-2;
+
+    findRoute(city, adress1, adress2, route, distance);
+    cout << distance[v2x] << endl;
+
     return 0;
 }

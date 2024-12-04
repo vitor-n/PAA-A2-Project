@@ -16,9 +16,11 @@ StreetSegment* CityGraph::m_edges(vertex v){
 
 CityGraph::CityGraph(int numVertices, int numRegions):
 m_numVertices(numVertices), m_numRegions(numRegions), m_numEdges(0), m_vertices(nullptr){
-    m_vertices = new VertexNode*[numVertices+2]; //Initializes the list of edges for each vetex
+    m_numVertices += 10;
+    numVertices += 10;
+    m_vertices = new VertexNode*[numVertices]; //Initializes the list of edges for each vetex
     regions = new Regions*[numRegions];
-    for (vertex i = 0; i < numVertices+2; i++) {
+    for (vertex i = 0; i < numVertices; i++) {
         m_vertices[i] = new VertexNode;
         m_vertices[i]->region = -1;
         m_vertices[i]->segments = nullptr;
