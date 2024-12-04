@@ -87,12 +87,11 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
     stations[region] = bestNode;
 }
 
-Graph genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[]){
+Graph genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **path){
     int cost[city.numNodes()];
-    int path[city.numNodes()];
 
     for (int i = 0; i < city.numRegions(); i++) {
-        city.CPTDijkstra(stations[i], path, cost, &compareCost);
+        city.CPTDijkstra(stations[i], path[i], cost, &compareCost);
         for (int j = 0; j < city.numRegions(); j++) {
             if (i == j) { continue; }
 

@@ -43,7 +43,6 @@ void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[], T (*func)
             if(!visited[v2]){
                 if (distance[v1] + func(node) < distance[v2]){
                     distance[v2] = distance[v1] + func(node);
-                    cout << func(node) << endl;
                     parents[v2] = v1;
                     heap.insert(v2);
                 }
