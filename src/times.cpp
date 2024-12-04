@@ -41,7 +41,7 @@ void getTimes(int numCities, const long int N) {
                 genSubwayStations(city, i, stations);
             }
 
-            Graph subwayMST = genSubwayLines(city, subwayFull, stations, path, false);
+            Graph* subwayMST = genSubwayLines(city, subwayFull, stations, path, false);
             // Encerra a contagem de tempo da primeira operação
             auto timeStop1 = high_resolution_clock::now();
 
@@ -52,7 +52,7 @@ void getTimes(int numCities, const long int N) {
             for (int i = 0; i < city.numRegions(); i++) delete path[i];
 
             delete[] path;
-            delete &subwayMST;
+            delete subwayMST;
         }
         outputFile.close();
     }

@@ -20,6 +20,7 @@ Heap<T>::Heap(int size, HeapType type): heap(nullptr), mapping(nullptr), pos(nul
 template <typename T>
 Heap<T>::~Heap(){
     delete heap;
+    delete pos;
 }
 
 template <typename T>

@@ -6,8 +6,8 @@
 #include "heap.h"
 #include "cityParser.h"
 
-Graph Graph::genMSTPrim() {
-    Graph mst = Graph(m_numVertices, 0);
+Graph* Graph::genMSTPrim() {
+    Graph* mst = new Graph(m_numVertices, 0);
     const int INF = 2147483647;
     int distance[m_numVertices];
     bool visited[m_numVertices];
@@ -49,8 +49,8 @@ Graph Graph::genMSTPrim() {
             EdgeNode* mstEdge2 = new EdgeNode;
             mstEdge1->lenght = distance[v];
             mstEdge2->lenght = distance[v];
-            mst.addSegment(parent[v], v, mstEdge1);
-            mst.addSegment(v, parent[v], mstEdge2);
+            mst->addSegment(parent[v], v, mstEdge1);
+            mst->addSegment(v, parent[v], mstEdge2);
         }
     }
 
@@ -87,7 +87,7 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
     stations[region] = bestNode;
 }
 
-Graph genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **path, bool bPrint){
+Graph* genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **path, bool bPrint){
     int cost[city.numNodes()];
 
     for (int i = 0; i < city.numRegions(); i++) {
@@ -104,7 +104,7 @@ Graph genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **p
         }
     }
 
-    Graph subwayMST = subwayFull.genMSTPrim();
+    Graph* subwayMST = subwayFull.genMSTPrim();
     return subwayMST;
 }
 
