@@ -59,3 +59,64 @@ Graph* genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **
 
 
 */
+int main(){
+    int INF = 2147483647;
+    CityGraph city = cityParser("data/city-1");
+    Graph busFull = Graph(city.numRegions(), 0);
+
+    int points[city.numRegions()];
+    int** path = new int*[city.numRegions()];
+    for (int i = 0; i < city.numRegions(); i++){
+        path[i] = new int[city.numNodes()];
+    }
+
+    for (int i = 0; i < city.numRegions(); i++) {
+        genBusPoints(city, i, points);
+    }
+
+    int cost[city.numNodes()];
+
+    for (int i = 0; i < city.numRegions(); i++) {
+        city.CPTDijkstra(points[i], path[i], cost, &compareBuildings);
+        for (int j = 0; j < city.numRegions(); j++) {
+            if (i == j) continue;
+
+            EdgeNode* edge = new EdgeNode;
+            edge->lenght = cost[points[j]];
+
+            cout << i << " " << j << " " << edge->lenght << endl;
+
+            busFull.addSegment(i, j, edge);
+        }
+    }
+
+    Graph busLine = Graph(city.numRegions(), 0);
+
+    bool visited[city.numRegions()];
+    for(int i = 0; i < city.numRegions(); i++) {visited[i] = false;}
+    int edgeCount = 0;
+
+    int v = 0;
+    cout << v << " ";
+    visited[v] = true;
+    while(edgeCount != city.numRegions() - 1){
+        int best = -1;
+        int minDist = INF;
+        EdgeNode* edge = busFull.m_edges(v);
+        while(edge){
+            if(!visited[edge->endVertex] && edge->lenght < minDist){
+                minDist = edge->lenght;
+                best = edge->endVertex;
+            }
+            edge = edge->next;
+        }
+        visited[best] = true;
+        EdgeNode* addEdge = new EdgeNode;
+        addEdge->lenght = minDist;
+        busLine.addSegment(v, best, addEdge);
+        v = best;
+        cout << "(" << minDist << ") " << v << " ";
+        edgeCount++;
+    }
+    cout << endl;
+}

@@ -9,6 +9,7 @@
 #include "heap.h"
 #include "times.h"
 #include "findRoute.h"
+#include "genBus.h"
 
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
@@ -16,7 +17,6 @@ using namespace std;
 
 
 
-int main () {
 /*    CityGraph city = cityParser("data/city-1");
     Graph subwayFull = Graph(city.numRegions(), 0);
 
@@ -76,16 +76,7 @@ int main () {
 */
     //getTimes(1, 12);
     //return 0;
-    CityGraph city = cityParser("data/city-1");
-    Graph subwayFull = Graph(city.numRegions(), 0);
 
-    int stations[city.numRegions()];
-    int** path = new int*[city.numRegions()];
-    for (int i = 0; i < city.numRegions(); i++){
-        path[i] = new int[city.numNodes()];
-    }
+    //Graph* subwayMST = subwayFull.genMSTPrim();
+    //return subwayMST;
 
-    for (int i = 0; i < city.numRegions(); i++) {
-        genSubwayStations(city, i, stations);
-    }
-}

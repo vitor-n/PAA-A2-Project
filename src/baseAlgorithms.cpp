@@ -17,7 +17,7 @@ T compareCost(EdgeNode* node){
 template<typename T>
 T compareBuildings(EdgeNode* node){
     T ratio = (node->nResidential + node->nIndustrial) /
-              (node->nTouristic + node->nComercial);
+              (node->nTouristic + node->nComercial + 1.0);
     return ratio * node->nBuildings;
 }
 

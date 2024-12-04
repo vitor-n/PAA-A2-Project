@@ -1,5 +1,5 @@
-#ifndef GENSUBWAY_H
-#define GENSUBWAY_H
+#ifndef GENBUS_H
+#define GENBUS_H
 
 #include "graph.h"
 
