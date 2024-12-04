@@ -74,6 +74,18 @@ int main () {
 
     cout << "v1: " << v1 << " v2: " << v2 << " dist_v1: " << dist_v1 << " dist_v2: " << dist_v2 << endl;
 */
-    getTimes(1, 12);
-    return 0;
+    //getTimes(1, 12);
+    //return 0;
+    CityGraph city = cityParser("data/city-1");
+    Graph subwayFull = Graph(city.numRegions(), 0);
+
+    int stations[city.numRegions()];
+    int** path = new int*[city.numRegions()];
+    for (int i = 0; i < city.numRegions(); i++){
+        path[i] = new int[city.numNodes()];
+    }
+
+    for (int i = 0; i < city.numRegions(); i++) {
+        genSubwayStations(city, i, stations);
+    }
 }

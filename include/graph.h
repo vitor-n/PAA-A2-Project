@@ -86,5 +86,6 @@ typedef CityGraph Graph;
 
 template<typename T> T compareLenght(EdgeNode*);
 template<typename T> T compareCost(EdgeNode*);
+template<typename T> T compareBuildings(EdgeNode*);
 
 #endif

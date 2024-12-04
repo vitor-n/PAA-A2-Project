@@ -14,6 +14,13 @@ T compareCost(EdgeNode* node){
     return node->escavationCost;
 }
 
+template<typename T>
+T compareBuildings(EdgeNode* node){
+    T ratio = (node->nResidential + node->nIndustrial) /
+              (node->nTouristic + node->nComercial);
+    return ratio * node->nBuildings;
+}
+
 template <typename T>
 void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[], T (*func)(EdgeNode*)){
     //inicialization
@@ -101,5 +108,7 @@ template void CityGraph::CPTDijkstraRegion(vertex, float[], int, float(EdgeNode*
 
 template int compareLenght(EdgeNode*);
 template int compareCost(EdgeNode*);
-template float compareLenght(EdgeNode* node);
+template int compareBuildings(EdgeNode*);
+template float compareLenght(EdgeNode*);
 template float compareCost(EdgeNode*);
+template float compareBuildings(EdgeNode*);
