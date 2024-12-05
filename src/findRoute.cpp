@@ -73,25 +73,6 @@ void findEdge(CityGraph& city, int region, int street, int number, int& v1, int&
     return;
 }
 
-EdgeNode* copyStreetInfo(CityGraph& city, int v1, int v2) {
-    EdgeNode* edge = new EdgeNode;
-    EdgeNode* node = city.m_edges(v1);
-    while (node) {
-        if (node->endVertex == v2) {
-            edge->maxSpeed = node->maxSpeed;
-
-            edge->nBuildings = node->nBuildings;
-            edge->nComercial = node->nComercial;
-            edge->nResidential = node->nResidential;
-            edge->nIndustrial = node->nIndustrial;
-            edge->nTouristic = node->nTouristic;
-            return edge;
-        }
-        node = node->next;
-    }
-    return nullptr;
-}
-
 void findRoute(CityGraph& city, int adress1[], int adress2[], int route[], float distance[], float (*func)(EdgeNode*)) {
     int v1 = -1, v2 = -1;
     float dist_v1 = -1, dist_v2 = -1;

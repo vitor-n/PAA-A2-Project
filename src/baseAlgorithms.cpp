@@ -21,6 +21,25 @@ T compareBuildings(EdgeNode* node){
     return ratio * node->nBuildings;
 }
 
+EdgeNode* copyStreetInfo(CityGraph& city, int v1, int v2) {
+    EdgeNode* edge = new EdgeNode;
+    EdgeNode* node = city.m_edges(v1);
+    while (node) {
+        if (node->endVertex == v2) {
+            edge->maxSpeed = node->maxSpeed;
+
+            edge->nBuildings = node->nBuildings;
+            edge->nComercial = node->nComercial;
+            edge->nResidential = node->nResidential;
+            edge->nIndustrial = node->nIndustrial;
+            edge->nTouristic = node->nTouristic;
+            return edge;
+        }
+        node = node->next;
+    }
+    return nullptr;
+}
+
 template <typename T>
 void CityGraph::CPTDijkstra(vertex v0, vertex parents[], T distance[], T (*func)(EdgeNode*)){
     //inicialization

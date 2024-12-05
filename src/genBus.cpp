@@ -112,8 +112,7 @@ float optimizeBusLines(int numRegions, int busLine[], float** distMatrix, float 
     return totalDist;
 }
 
-int main(){
-    CityGraph city = cityParser("data/city-1");
+Graph buildBusGraph(CityGraph& city){
     Graph busFull = Graph(city.numRegions(), 0);
 
     //ESCOLHA DOS PONTOS QUE DEVE PASSAR NA REGIÃO
@@ -151,6 +150,9 @@ int main(){
 
     //OTIMIZAÇÃO DO CICLO O(r^4)
     totalDist = optimizeBusLines(city.numRegions(), busLine, distMatrix, totalDist);
+
+    Graph busGraph = Graph(city.numNodes(), 0);
+
     ofstream outFile1("data/city-1/bus-edges.csv");
     outFile1 << "node1,node2" << endl;
     //busFull.print();
@@ -160,9 +162,22 @@ int main(){
         int last = v;
         while(end != v){
             cout << v << " ";
+            EdgeNode* node = copyStreetInfo(city, path[busLine[i - 1]][v], v);
+            busGraph.addSegment(path[busLine[i - 1]][v], v, node);
             v = path[busLine[i - 1]][v];
             if (last != v) { outFile1 << last << "," << v << endl; }
             last = v;
         }
+        if(i == 1){
+            EdgeNode* node = copyStreetInfo(city, v, points[busLine[0]]);
+            busGraph.addSegment(v, points[busLine[0]], node);
+        }
     }
+    busGraph.print();
+    return busGraph;
+}
+
+int main(){
+    CityGraph city = cityParser("data/city-1");
+    buildBusGraph(city).print();
 }
