@@ -53,6 +53,12 @@ comando usado deverá ser:
 $ make tarefa2
 ```
 
+Para executar a tarefa 3 (geração da rota de menor tempo), use:
+
+```bash
+$ make tarefa3
+```
+
 Para visualizar o grafo, com as linhas geradas, o comando usado deverá ser:
 
 ```bash
