@@ -1,7 +1,7 @@
 # Projeto e Análise de Algorítmos - Trabalho A2
 
 *Desenvolvido por Guilherme Moreira Castilho, Paulo César Gomes Rodrigues, Pedro
-Santos Tokar e Vitor do Nascimento Moreira.*
+Santos Tokar e Vitor Matheus do Nascimento Moreira.*
 
 -------------------------------------------------------------------------------
 
@@ -26,4 +26,35 @@ priorizando a passagem por pontos turísticos;
 transporte devem ser tomados para minimizar o tempo de deslocamento entre dois
 pontos, além do quanto a pessoa irá gastar seguindo a rota sugerida.
 
+Além de módulos para realizar as tarefas citadas, também existem módulos para
+gerar grafos de teste (feitos em Python) e visualizá-los.
+
 ## Rodando o sistema
+
+Nosso trabalho conta com o comando `make` para gerenciar as compilações. Antes de
+usar qualquer outro comando, é importante gerar o grafo que será usado. Para isso,
+basta usar, na raiz do repositório:
+
+```bash
+$ make graphgen
+```
+
+Para ver como é feita a execução da tarefa 1 (geração da linha de metrô), basta
+usar o comando
+
+```bash
+$ make tarefa1
+```
+
+Para ver como é feita a execução da tarefa 2 (geração da linha de ônibus), o
+comando usado deverá ser:
+
+```bash
+$ make tarefa2
+```
+
+Para visualizar o grafo, com as linhas geradas, o comando usado deverá ser:
+
+```bash
+$ make graphread
+```
