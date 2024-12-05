@@ -152,5 +152,12 @@ int main(){
     totalDist = optimizeBusLines(city.numRegions(), busLine, distMatrix, totalDist);
 
     //busFull.print();
-
+    for(int i = city.numRegions(); i > 0; i--){
+        int v = points[i % city.numRegions()];
+        int end = points[i - 1];
+        while(end != v){
+            cout << v << " ";
+            v = path[i - 1][v];
+        }
+    }
 }
