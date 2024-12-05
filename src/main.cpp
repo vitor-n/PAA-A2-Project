@@ -17,8 +17,9 @@ int main () {
 
     int adress1[3] = {3, 0, 1};
     int adress2[3] = {6, 120, 2};
+    float info[3];
 
-    findBestRoute(city, subway, bus, adress1, adress2);
+    findBestRoute(city, subway, bus, adress1, adress2, info, 100);
 
     return 0;
 }
