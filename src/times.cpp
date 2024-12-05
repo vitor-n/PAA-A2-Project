@@ -14,6 +14,7 @@ using chrono::high_resolution_clock;
 using chrono::duration_cast;
 using chrono::nanoseconds;
 
+/*
 void getTimes(int numCities, const long int N) {
 
     for (int numCity = 1; numCity < numCities + 1; numCity++){
@@ -57,3 +58,4 @@ void getTimes(int numCities, const long int N) {
         outputFile.close();
     }
 }
+*/
