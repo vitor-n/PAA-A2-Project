@@ -9,7 +9,7 @@
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
 using namespace std;
-
+/*
 int main () {
     CityGraph city = cityParser("data/city-1");
     Graph subway = buildSubwayGraph(city, false);
@@ -21,4 +21,4 @@ int main () {
     findBestRoute(city, subway, bus, adress1, adress2);
 
     return 0;
-}
+}*/
