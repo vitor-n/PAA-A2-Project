@@ -119,7 +119,6 @@ int main() {
     string input;
     while(getline(cin, input)) { 
         cout << endl;
-        transform(input.begin(), input.end(), input.begin(), ::toupper);
         auto it = c.find(input);
         if(it != end(c)) {
             (it->second)(); // execute the command
