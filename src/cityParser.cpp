@@ -90,7 +90,7 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
         node->escavationCost = escavationCost;
 
         node->nBuildings = numBuildings;
-        node->nComercial = numResidentials - numBuildings;
+        node->nComercial = numBuildings - numResidentials;
         node->nResidential = numResidentials;
         node->nIndustrial = 0;
         node->nTouristic = 0;
