@@ -166,3 +166,18 @@ void findBestRoute(CityGraph& city, Graph& subway, Graph& bus, int adress1[], in
     findClosestSubway(city, distanceForwardWalk);
     findClosestBus(city, distanceForwardWalk);
 }
+
+void displayRoute(int parents[], int numNodes, int end){
+    int route[numNodes];
+    int routeLenght = 0;
+    int v = end;
+    while(parents[v] != v){
+        route[routeLenght++] = v;
+        v = parents[v];
+    }
+    cout << "[ " << v << " ";
+    for(int i = routeLenght - 1; i > -1; i--){
+        cout << route[i] << " ";
+    }
+    cout << "]" << endl;
+}

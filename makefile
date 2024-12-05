@@ -46,4 +46,4 @@ test:
 	./test
 
 clean: ## Clean created files
-	rm -f $(wildcard ./*.exe) $(wildcard ./*out*)
+	rm -f $(wildcard ./*.exe) $(wildcard ./*out*) $(wildcard ./tarefa*)
