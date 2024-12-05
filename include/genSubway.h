@@ -3,7 +3,8 @@
 
 #include "graph.h"
 
-void genSubwayStations(CityGraph&, int, int[]);
+void genSubwayStations(CityGraph&, int, int[], bool);
 Graph* genSubwayLines(CityGraph&, int[], int**, bool);
+Graph buildSubwayGraph(CityGraph&, bool);
 
 #endif

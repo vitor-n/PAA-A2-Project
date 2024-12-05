@@ -7,7 +7,7 @@
 #include "heap.h"
 #include "cityParser.h"
 
-void genBusPoints(CityGraph& cityGraph, int region, int points[]) {
+void genBusPoints(CityGraph& cityGraph, int region, int points[], bool verbose) {
     int maxDist[cityGraph.numNodes()];
     int distances[cityGraph.numNodes()];
     for (int i = 0; i < cityGraph.numNodes(); i++) {
@@ -33,7 +33,7 @@ void genBusPoints(CityGraph& cityGraph, int region, int points[]) {
         }
     }
 
-    cout << "Bus Station " << region << ": " << bestNode << endl;
+    if (verbose) cout << "Bus Station " << region << ": " << bestNode << endl;
     points[region] = bestNode;
 }
 
@@ -55,7 +55,6 @@ float genBusLines(int numRegions, int busLine[], float** distMatrix){
     for(int i = 0; i < numRegions; i++) {visited[i] = false;}
 
     int v = 0;
-    cout << v << " ";
     busLine[v] = 0; visited[v] = true;
     float totalDist = 0;
     int edgeCount = 0;
@@ -74,13 +73,11 @@ float genBusLines(int numRegions, int busLine[], float** distMatrix){
         totalDist += minDist;
         edgeCount++;
         v = bestV;
-        cout << "(" << minDist << ") " << v << " ";
-    } cout << "(" << distMatrix[v][0] << ")";
-    cout << endl << "Total cost: " << totalDist << endl;
+    }
     return totalDist;
 }
 
-void swapPath(int busLine[], int i, int j){
+void swapPath(int busLine[], int i, int j) {
     i = i + 1;
     while(i < j){
         int temp = busLine[i];
@@ -100,10 +97,7 @@ float optimizeBusLines(int numRegions, int busLine[], float** distMatrix, float 
                                + distMatrix[busLine[i]][busLine[j]] + distMatrix[busLine[i + 1]][busLine[(j + 1) % numRegions]];
                 if (deltaCost < 0){
                     totalDist += deltaCost;
-                    cout << "swapped " << i << " for " << j << ": " << "[ " << busLine[0];
                     swapPath(busLine, i, j);
-                    for(int l = 1; l < numRegions; l++){cout << "(" << distMatrix[busLine[l - 1]][busLine[l]] << ") " << busLine[l] << " ";}
-                    cout << "] Total cost: " << totalDist << endl;
                     improved = true;
                 }
             }
@@ -112,7 +106,7 @@ float optimizeBusLines(int numRegions, int busLine[], float** distMatrix, float 
     return totalDist;
 }
 
-Graph buildBusGraph(CityGraph& city){
+Graph buildBusGraph(CityGraph& city, bool verbose) {
     Graph busFull = Graph(city.numRegions(), 0);
 
     //ESCOLHA DOS PONTOS QUE DEVE PASSAR NA REGIÃO
@@ -123,7 +117,7 @@ Graph buildBusGraph(CityGraph& city){
     }
 
     for (int i = 0; i < city.numRegions(); i++) {
-        genBusPoints(city, i, points);
+        genBusPoints(city, i, points, verbose);
     }
 
     //GERAÇÃO BUS FULL
@@ -136,12 +130,6 @@ Graph buildBusGraph(CityGraph& city){
     }
 
     genBusLinesFull(city, points, distMatrix, path);
-
-    for(int i = 0; i < city.numRegions(); i++){
-        for(int j = 0; j < city.numRegions(); j++){
-            cout << distMatrix[i][j] << " ";
-        } cout << endl;
-    }
 
     //DETERMINAÇÃO DO PRIMEIRO CICLO HAMILTONIANO QUE TEM
     int busLine[city.numRegions()];
@@ -156,12 +144,13 @@ Graph buildBusGraph(CityGraph& city){
     ofstream outFile1("data/city-1/bus-edges.csv");
     outFile1 << "node1,node2" << endl;
     //busFull.print();
+    if (verbose) cout << "Bus Line: [ ";
     for(int i = city.numRegions(); i > 0; i--){
         int v = points[busLine[i % city.numRegions()]];
         int end = points[busLine[i - 1]];
         int last = v;
         while(end != v){
-            cout << v << " ";
+            if (verbose) cout << v << " ";
             city.busPoints->add(v);
             EdgeNode* node = copyStreetInfo(city, path[busLine[i - 1]][v], v);
             busGraph.addSegment(path[busLine[i - 1]][v], v, node);
@@ -173,16 +162,13 @@ Graph buildBusGraph(CityGraph& city){
         //    EdgeNode* node = copyStreetInfo(city, v, points[busLine[0]]);
         //    busGraph.addSegment(v, points[busLine[0]], node);
         //}
-    }
-    for (auto it = city.busPoints->begin(); it.hasNext(); it.next()) {
-        cout << it.value() << ",";
-    } cout << endl;
-    busGraph.print();
+    } 
+    if (verbose) cout << "]" << endl;
     return busGraph;
 }
 
 // int main() {
 //     CityGraph city = cityParser("data/city-1");
-//     buildBusGraph(city).print();
+//     buildBusGraph(city, true);
 // }
 

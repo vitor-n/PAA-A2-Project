@@ -367,16 +367,16 @@ class GraphGenerator:
         colors = [self.edge_to_region[edge] for edge in edges]
 
         palette = [
-            "#377eb8",  # blue
-            "#ff7f00",  # orange
-            "#4daf4a",  # green
-            "#f781bf",  # pink
-            "#a65628",  # brown
-            "#984ea3",  # purple
-            "#999999",  # gray
-            "#e41a1c",  # red
-            "#dede00",   # yellow
-            "#ff00ff"   # magenta
+            "#FF8585",
+            "#FFA77A",
+            "#FFB974",
+            "#E3FF78",
+            "#99FF99",
+            "#80FFD4",
+            "#66D6E8",
+            "#6699FF",
+            "#8C75FF",
+            "#FF99FF",
         ]
 
         unique_regions = list(set(colors))
@@ -385,11 +385,11 @@ class GraphGenerator:
 
         plt.figure(figsize=(6, 6))
         nx.draw(self.graph, self.pos, edge_color=edge_colors, node_size=0, width=3, with_labels=False)
-        nx.draw(self.subway, self.pos, edge_color="black", node_size=0, width=3, with_labels=False)
-        nx.draw(self.bus, self.pos, edge_color="black", node_size=0, width=3, with_labels=False)
+        nx.draw(self.subway, self.pos, edge_color="#444444", node_size=0, width=3, with_labels=False)
+        nx.draw(self.bus, self.pos, edge_color="#888888", node_size=0, width=3, with_labels=False)
 
         for station in self.subway_stations:
-            plt.plot(self.pos[station][0], self.pos[station][1], 'o', color="black", markersize=10)
+            plt.plot(self.pos[station][0], self.pos[station][1], 'o', color="#444444", markersize=10)
 
         if self.num_rows < 20 and self.num_cols < 20:
             for edge in self.graph.edges():

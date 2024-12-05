@@ -58,7 +58,7 @@ Graph* Graph::genMSTPrim() {
     return mst;
 }
 
-void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
+void genSubwayStations(CityGraph& cityGraph, int region, int stations[], bool verbose) {
     int maxDist[cityGraph.numNodes()];
     int distances[cityGraph.numNodes()];
     for (int i = 0; i < cityGraph.numNodes(); i++) {
@@ -84,11 +84,11 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
         }
     }
 
-    cout << "SubwayStation " << region << ": " << bestNode << endl;
+    if (verbose) cout << "SubwayStation " << region << ": " << bestNode << endl;
     stations[region] = bestNode;
 }
 
-Graph* genSubwayLines(CityGraph& city, int stations[], int **path, bool bPrint){
+Graph* genSubwayLines(CityGraph& city, int stations[], int **path, bool verbose){
     int cost[city.numNodes()];
     Graph subwayFull = Graph(city.numRegions(), 0);
 
@@ -99,8 +99,6 @@ Graph* genSubwayLines(CityGraph& city, int stations[], int **path, bool bPrint){
 
             EdgeNode* edge = new EdgeNode;
             edge->lenght = cost[stations[j]];
-
-            if (bPrint) cout << i << " " << j << " " << edge->lenght << endl;
 
             subwayFull.addSegment(i, j, edge);
         }
@@ -117,9 +115,9 @@ Graph buildSubwayGraph(CityGraph& city, bool verbose) {
         path[i] = new int[city.numNodes()];
     }
     for (int i = 0; i < city.numRegions(); i++) {
-        genSubwayStations(city, i, stations);
+        genSubwayStations(city, i, stations, verbose);
     }
-    Graph subwayMST = *genSubwayLines(city, stations, path, true);
+    Graph subwayMST = *genSubwayLines(city, stations, path, verbose);
 
     Graph subwayGraph = Graph(city.numNodes(), 0);
     ofstream outFile1("data/city-1/subway-edges.csv");
@@ -138,11 +136,12 @@ Graph buildSubwayGraph(CityGraph& city, bool verbose) {
                 continue;
             }
             int v = stations[j];
-            cout << "Region " << i << " to " << node->endVertex;
-            cout << " (cost: " << node->lenght << ") [ ";
+            if (verbose) cout << "Region " << i << " to " << node->endVertex;
+            if (verbose) cout << " (cost: " << node->lenght << ") [ ";
             int last = v;
             while(path[i][v] != v){
-                cout << v << " ";
+                if (verbose) cout << v << " ";
+                city.subwayStations->add(v);
                 EdgeNode* node1 = copyStreetInfo(city, path[i][v], v);
                 EdgeNode* node2 = copyStreetInfo(city, v, path[i][v]);
                 subwayGraph.addSegment(path[i][v], v, node1);
@@ -151,7 +150,7 @@ Graph buildSubwayGraph(CityGraph& city, bool verbose) {
                 if (last != v) { outFile1 << last << "," << v << endl; }
                 last = v;
             }
-            cout << v << " ]" << endl;
+            if (verbose) cout << v << " ]" << endl;
             node = node->next;
         }
     }
@@ -160,5 +159,5 @@ Graph buildSubwayGraph(CityGraph& city, bool verbose) {
 
 int main(){
     CityGraph city = cityParser("data/city-1");
-    buildSubwayGraph(city, false).print();
+    buildSubwayGraph(city, true);
 }
