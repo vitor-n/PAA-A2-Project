@@ -18,6 +18,15 @@ int getTime()
     return localTime->tm_hour;
 }
 
+int getMinutes()
+{
+    time_t now = time(0);
+    tm* localTime = localtime(&now);
+    return localTime->tm_min;
+}
+
+
+
 /**
  * @brief Detemines a penalty factor based on the current hour.
  * 
@@ -57,4 +66,14 @@ double detTraffic(int street, int region, int maxSpeed)
     double result = regionPenalty * (maxSpeed * (1 - reductionFactor));
 
     return result;
+}
+
+int secondsToSubway(int v)
+{
+    int nowMin = getMinutes();
+    
+    if (nowMin % 10 == 0) 
+        return 0;
+    else 
+        return (10 - nowMin % 10) * 60; 
 }
