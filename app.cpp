@@ -1,7 +1,10 @@
 #include <map>
 #include <functional>
+#include <sstream>
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <ctime>  
 
 typedef std::map< std::string, std::function<void(void)>> command_dict;
 //                                           ^^^^^^^^
@@ -28,24 +31,60 @@ typedef std::map< std::string, std::function<void(void)>> command_dict;
 
 using namespace std;
 
-void command1() { cout << "commanda" << endl; }
+bool parseAdressInput(const string& input, int& region, int& street, int& number) {
+    istringstream iss(input);
+    int count = 0;
+    if (iss >> region) count++;
+    if (iss >> street) count++;
+    if (iss >> number) count++;
+
+    string remaining;
+    if (count == 3 && !(iss >> remaining)) {
+        return true;
+    }
+    return true;
+}
+
+void command1() { 
+    int region, street, number;
+    string input;
+    cout << "FROM: ";
+    getline(cin, input);
+    parseAdressInput(input, region, street, number);
+    cout << "TO:   ";
+    getline(cin, input);
+    parseAdressInput(input, region, street, number);
+}
+
 void command2() { cout << "commandb" << endl; }
-void command3() { cout << "commandc" << endl; }
+void command3() {
+     cout << 1+912 << endl; 
+}
+
+void commands() {
+    cout << endl;
+    printf ("Commands %sFROMTO%s | %sLIST%s | %sCLEAR%s | %sHELP%s\n", BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
+    cout << "> ";
+}
 
 void welcome() {
-    cout << CLEAR;
+    time_t now = time(0);
+    tm* localTime = localtime(&now);
     printf ("Welcome to %sG%so%so%sg%so%sl%s-Routes!\n", BOLDGREEN, BOLDBLUE, BOLDRED, BOLDGREEN, BOLDBLUE, BOLDYELLOW, RESET);
-    cout << "Making your routes 10^100 times better!" << endl;
-
-    cout << endl;
+    cout <<  "Making your routes 10^100 times better!" << endl;
+    cout << "Sytem time: " << localTime->tm_hour << ":" << localTime->tm_min << endl;
 }
+
 
 void routeInput() {
-    cout << "╭FROM: " << endl;
-    cout << "╰TO:   " << endl;
+    cout << "FROM: " << endl;
+    cout << "TO:   " << endl;
 }
 
-void clrscr() { cout << CLEAR; }
+void clrscr() { 
+    cout << CLEAR;
+    welcome();    
+}
 
 void printInfo(int time, float cost, int distance) {
     int h = time/3600;
@@ -60,23 +99,29 @@ void printInfo(int time, float cost, int distance) {
 
 int main() {
      command_dict c;
-    c["a"] = &command1;
-    c["b"] = &command2;
-    c["c"] = &command3;
-    c["clear"] = &clrscr;
+    c["FROMTO"] = &command1;
+    c["LIST"] = &command2;
+    c["HELP"] = &command3;
+    c["CLEAR"] = &clrscr;
 
+    cout << CLEAR;
     welcome();
-    routeInput();
+    commands();
 
     string input;
-    while(getline(cin, input)) { // quit the program with ctrl-d
+    while(getline(cin, input)) { 
+        cout << endl;
+        transform(input.begin(), input.end(), input.begin(), ::toupper);
         auto it = c.find(input);
         if(it != end(c)) {
             (it->second)(); // execute the command
+            commands();
         } else {
             cout << CLEAR;
             welcome();
+            commands();
             cout << "Command \"" << input << "\" not known" << endl;
+            cout << "> ";
         }
     }
 }
