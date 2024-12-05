@@ -50,6 +50,8 @@ private:
     Crossing** m_vertices; //Two references because it's a list of nodes
 public:
     Regions** regions; //List of regions
+    LinkedList* busPoints;
+    LinkedList* subwayStations;
     int numRegions();
     int numNodes();
     //Class constructor and destructor

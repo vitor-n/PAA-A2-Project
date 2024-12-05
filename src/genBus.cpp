@@ -162,6 +162,7 @@ Graph buildBusGraph(CityGraph& city){
         int last = v;
         while(end != v){
             cout << v << " ";
+            city.busPoints->add(v);
             EdgeNode* node = copyStreetInfo(city, path[busLine[i - 1]][v], v);
             busGraph.addSegment(path[busLine[i - 1]][v], v, node);
             v = path[busLine[i - 1]][v];
@@ -173,12 +174,15 @@ Graph buildBusGraph(CityGraph& city){
         //    busGraph.addSegment(v, points[busLine[0]], node);
         //}
     }
+    for (auto it = city.busPoints->begin(); it.hasNext(); it.next()) {
+        cout << it.value() << ",";
+    } cout << endl;
     busGraph.print();
     return busGraph;
 }
-/*
-int main(){
-    CityGraph city = cityParser("data/city-1");
-    buildBusGraph(city).print();
-}
-*/
+
+// int main() {
+//     CityGraph city = cityParser("data/city-1");
+//     buildBusGraph(city).print();
+// }
+
