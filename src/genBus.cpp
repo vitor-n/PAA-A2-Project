@@ -176,8 +176,9 @@ Graph buildBusGraph(CityGraph& city){
     busGraph.print();
     return busGraph;
 }
-
+/*
 int main(){
     CityGraph city = cityParser("data/city-1");
     buildBusGraph(city).print();
 }
+*/

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <climits>
+#include <fstream>
 
 #include "graph.h"
 #include "genSubway.h"
@@ -87,8 +88,9 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[]) {
     stations[region] = bestNode;
 }
 
-Graph* genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **path, bool bPrint){
+Graph* genSubwayLines(CityGraph& city, int stations[], int **path, bool bPrint){
     int cost[city.numNodes()];
+    Graph subwayFull = Graph(city.numRegions(), 0);
 
     for (int i = 0; i < city.numRegions(); i++) {
         city.CPTDijkstra(stations[i], path[i], cost, &compareCost);
@@ -108,6 +110,55 @@ Graph* genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **
     return subwayMST;
 }
 
-Graph* genSubway(CityGraph& city, bool verbose) {
-    
+Graph buildSubwayGraph(CityGraph& city, bool verbose) {
+    int stations[city.numRegions()];
+    int** path = new int*[city.numRegions()];
+    for (int i = 0; i < city.numRegions(); i++){
+        path[i] = new int[city.numNodes()];
+    }
+    for (int i = 0; i < city.numRegions(); i++) {
+        genSubwayStations(city, i, stations);
+    }
+    Graph subwayMST = *genSubwayLines(city, stations, path, true);
+
+    Graph subwayGraph = Graph(city.numNodes(), 0);
+    ofstream outFile1("data/city-1/subway-edges.csv");
+    ofstream outFile2("data/city-1/subway-nodes.csv");
+    outFile2 << "station" << endl;
+    for (int i = 0; i < city.numRegions(); i++) {
+        outFile2 << stations[i] << endl;
+    }
+    outFile1 << "node1,node2" << endl;
+    for (int i = 0; i < subwayMST.numNodes(); i++) {
+        EdgeNode* node = subwayMST.m_edges(i);
+        while(node){
+            int j = node->endVertex;
+            if(j < i){
+                node = node->next;
+                continue;
+            }
+            int v = stations[j];
+            cout << "Region " << i << " to " << node->endVertex;
+            cout << " (cost: " << node->lenght << ") [ ";
+            int last = v;
+            while(path[i][v] != v){
+                cout << v << " ";
+                EdgeNode* node1 = copyStreetInfo(city, path[i][v], v);
+                EdgeNode* node2 = copyStreetInfo(city, v, path[i][v]);
+                subwayGraph.addSegment(path[i][v], v, node1);
+                subwayGraph.addSegment(v, path[i][v], node2);
+                v = path[i][v];
+                if (last != v) { outFile1 << last << "," << v << endl; }
+                last = v;
+            }
+            cout << v << " ]" << endl;
+            node = node->next;
+        }
+    }
+    return subwayGraph;
 } 
+
+int main(){
+    CityGraph city = cityParser("data/city-1");
+    buildSubwayGraph(city, false).print();
+}
