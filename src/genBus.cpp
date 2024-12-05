@@ -168,10 +168,10 @@ Graph buildBusGraph(CityGraph& city){
             if (last != v) { outFile1 << last << "," << v << endl; }
             last = v;
         }
-        if(i == 1){
-            EdgeNode* node = copyStreetInfo(city, v, points[busLine[0]]);
-            busGraph.addSegment(v, points[busLine[0]], node);
-        }
+        //if(i == 1){
+        //    EdgeNode* node = copyStreetInfo(city, v, points[busLine[0]]);
+        //    busGraph.addSegment(v, points[busLine[0]], node);
+        //}
     }
     busGraph.print();
     return busGraph;
