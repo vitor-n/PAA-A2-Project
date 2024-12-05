@@ -27,6 +27,9 @@ EdgeNode* copyStreetInfo(CityGraph& city, int v1, int v2) {
     while (node) {
         if (node->endVertex == v2) {
             edge->maxSpeed = node->maxSpeed;
+            edge->lenght = node->lenght;
+            edge->region = node->region;
+            edge->street = node->street;
 
             edge->nBuildings = node->nBuildings;
             edge->nComercial = node->nComercial;

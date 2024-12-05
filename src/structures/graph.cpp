@@ -20,6 +20,8 @@ m_numVertices(numVertices), m_numRegions(numRegions), m_numEdges(0), m_vertices(
     numVertices += 10;
     m_vertices = new VertexNode*[numVertices]; //Initializes the list of edges for each vetex
     regions = new Regions*[numRegions];
+    busPoints = new LinkedList(0);
+    subwayStations = new LinkedList(0);
     for (vertex i = 0; i < numVertices; i++) {
         m_vertices[i] = new VertexNode;
         m_vertices[i]->region = -1;
