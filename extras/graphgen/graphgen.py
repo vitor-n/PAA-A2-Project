@@ -61,9 +61,18 @@ class GraphGenerator:
 
                     self.graph.edges[edge]["length"] = len_row[i]
             
-                    num_buildings = len_row[i] // 10 - np.random.randint(0, len_row[i] // 10 - 1)
-                    self.graph.edges[edge]["numBuildings"] = num_buildings
-                    self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
+                    num_buildings = len_row[i] // 10
+
+                    numIndustrial = random.randint(0, num_buildings//5+1)
+                    numCommercial = random.randint(1, num_buildings//3+1)
+                    numTouristics = random.randint(0, num_buildings//4+1)
+                    numResidentials = random.randint(num_buildings//4,num_buildings//2+1)
+                    self.graph.edges[edge]["numResidentials"] = numResidentials
+                    self.graph.edges[edge]["numIndustrial"] = numIndustrial
+                    self.graph.edges[edge]["numCommercial"] = numCommercial
+                    self.graph.edges[edge]["numTouristics"] = numTouristics
+                    self.graph.edges[edge]["numBuildings"] = numCommercial + numIndustrial + numTouristics + numResidentials
+
                     self.graph.edges[edge]["escavationCost"] = len_row[i] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
                     
                     self.edges.append(edge)
@@ -77,41 +86,49 @@ class GraphGenerator:
                     edge = (node1, node2)
                     self.graph.add_edge(node1, node2)
                     self.graph.edges[edge]["length"] = len_col[j]
-                    num_buildings = len_col[j] // 10 - np.random.randint(0, len_col[j] // 10 - 1)
-                    self.graph.edges[edge]["numBuildings"] = num_buildings
-                    self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
+                    num_buildings = len_col[i] // 10 - np.random.randint(0, len_col[i] // 20 - 1)
+
+                    numIndustrial = random.randint(0, num_buildings//5)
+                    numCommercial = random.randint(1, num_buildings//3)
+                    numTouristics = random.randint(0, num_buildings//4)
+                    numResidentials = random.randint(num_buildings//4,num_buildings//2)
+                    self.graph.edges[edge]["numResidentials"] = numResidentials
+                    self.graph.edges[edge]["numIndustrial"] = numIndustrial
+                    self.graph.edges[edge]["numCommercial"] = numCommercial
+                    self.graph.edges[edge]["numTouristics"] = numTouristics
+                    self.graph.edges[edge]["numBuildings"] = numCommercial + numIndustrial + numTouristics + numResidentials
                     self.graph.edges[edge]["escavationCost"] = len_col[j] * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
                     self.edges.append(edge)
                     self.edges.append((node2, node1))
 
-                diag_1 = random.randint(0, 1)
+                # diag_1 = random.randint(0, 1)
 
-                if i < m -1 and j < n - 1 and random.random() < diag_prob and diag_1 and node1 %2 == 0:
-                    # Add edge to the node to the right
-                    node2 = (i + 1) * n + (j + 1)
-                    edge = (node1, node2)
-                    self.graph.add_edge(node1, node2)
-                    self.graph.edges[edge]["length"] = np.sqrt(len_row[i]**2 + len_col[j]**2)
-                    num_buildings = len_col[j] // 10 - np.random.randint(0, len_col[j] // 10 - 1)
-                    self.graph.edges[edge]["numBuildings"] = num_buildings
-                    self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
-                    self.graph.edges[edge]["escavationCost"] = np.sqrt(len_row[i]**2 + len_col[j]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
-                    self.edges.append(edge)
-                    self.edges.append((node2, node1))
+                # if i < m -1 and j < n - 1 and random.random() < diag_prob and diag_1 and node1 %2 == 0:
+                #     # Add edge to the node to the right
+                #     node2 = (i + 1) * n + (j + 1)
+                #     edge = (node1, node2)
+                #     self.graph.add_edge(node1, node2)
+                #     self.graph.edges[edge]["length"] = np.sqrt(len_row[i]**2 + len_col[j]**2)
+                #     num_buildings = len_col[j] // 10 - np.random.randint(0, len_col[j] // 10 - 1)
+                #     self.graph.edges[edge]["numBuildings"] = num_buildings
+                #     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5,num_buildings//2)
+                #     self.graph.edges[edge]["escavationCost"] = np.sqrt(len_row[i]**2 + len_col[j]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
+                #     self.edges.append(edge)
+                #     self.edges.append((node2, node1))
 
-                if i < m - 1 and j > 0 and random.random() < diag_prob and not diag_1 and node1 %2 == 0:
-                    node2 = (i + 1) * n + (j - 1)
-                    edge = (node1, node2)
-                    self.graph.add_edge(node1, node2)
-                    self.graph.edges[edge]["length"] = np.sqrt(len_row[i]**2 + len_col[j-1]**2)
+                # if i < m - 1 and j > 0 and random.random() < diag_prob and not diag_1 and node1 %2 == 0:
+                #     node2 = (i + 1) * n + (j - 1)
+                #     edge = (node1, node2)
+                #     self.graph.add_edge(node1, node2)
+                #     self.graph.edges[edge]["length"] = np.sqrt(len_row[i]**2 + len_col[j-1]**2)
 
-                    num_buildings = min(len_row[i], len_col[j-1]) // 10 - np.random.randint(0, min(len_row[i], len_col[j-1]) // 10 - 1)
-                    self.graph.edges[edge]["numBuildings"] = num_buildings
-                    self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5, num_buildings//2)
-                    self.graph.edges[edge]["escavationCost"] = np.sqrt(len_row[i]**2 + len_col[j-1]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
+                #     num_buildings = min(len_row[i], len_col[j-1]) // 10 - np.random.randint(0, min(len_row[i], len_col[j-1]) // 10 - 1)
+                #     self.graph.edges[edge]["numBuildings"] = num_buildings
+                #     self.graph.edges[edge]["numResidentials"] = num_buildings - random.randint(num_buildings//5, num_buildings//2)
+                #     self.graph.edges[edge]["escavationCost"] = np.sqrt(len_row[i]**2 + len_col[j-1]**2) * mean_cost_meter + random.randint(-deviation_cost_meter, deviation_cost_meter) // 100 * 100
 
-                    self.edges.append(edge)
-                    self.edges.append((node2, node1))
+                #     self.edges.append(edge)
+                #     self.edges.append((node2, node1))
 
     def choose_seeds(self, N):
         """Choose N random node_seeds (nodes) from the graph G."""
@@ -292,7 +309,20 @@ class GraphGenerator:
             f.write(f"num_edges={len(self.graph.edges)}\n")
 
         with open(f"{folder}/city-edges.csv", "w", newline="") as csvfile:
-            fieldnames = ["node1", "node2", "length", "numBuildings", "numResidentials", "maxSpeed", "region", "street", "hasBusLane", "escavationCost", "streetStart"]
+            fieldnames = ["node1",
+                          "node2",
+                          "region",
+                          "street",
+                          "streetStart",
+                          "length",
+                          "maxSpeed",
+                          "numBuildings",
+                          "numResidentials",
+                          "numIndustrial",
+                          "numCommercial",
+                          "numTouristics",
+                          "escavationCost"
+                          ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
             region_to_index = {region: i for i, region in enumerate(self.seeds)}
@@ -309,13 +339,15 @@ class GraphGenerator:
                     "node2": edge[1],
                     "region": region_to_index[data.get("region", "@")],
                     "street": data.get("street", "@"),
+                    "streetStart": data.get("streetStart", "@"),
                     "length": data.get("length", "@"),
+                    "maxSpeed": data.get("maxSpeed", "@"),
                     "numBuildings": data.get("numBuildings", "@"),
                     "numResidentials": data.get("numResidentials", "@"),
-                    "maxSpeed": data.get("maxSpeed", "@"),
-                    "hasBusLane": data.get("hasBusLane", 0),
-                    "escavationCost": data.get("escavationCost", "@"),
-                    "streetStart": data.get("streetStart", "@")
+                    "numIndustrial": data.get("numIndustrial", "@"),
+                    "numCommercial": data.get("numCommercial", "@"),
+                    "numTouristics": data.get("numTouristics", "@"),
+                    "escavationCost": data.get("escavationCost", "@")
                 })
 
         with open(f"{folder}/city-nodes.csv", "w", newline="") as csvfile:

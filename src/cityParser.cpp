@@ -55,31 +55,21 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
     getline(file, line);
     vector<string> header = split(line, CSVDELIMITER);
 
-    int node1;
-    int node2;
-    float length;
-    int numBuildings;
-    int numResidentials;
-    int maxSpeed;
-    int region;
-    int street;
-    bool hasBusLane;
-    float escavationCost;
-    int streetStart;
-
     while (getline(file, line)) {
         row = split(line, CSVDELIMITER);
-        node1 = stoi(row[0]);
-        node2 = stoi(row[1]);
-        length = stof(row[2]);
-        numBuildings = stoi(row[3]);
-        numResidentials = stoi(row[4]);
-        maxSpeed = stoi(row[5]);
-        region = stoi(row[6]);
-        street = stoi(row[7]);
-        hasBusLane = stoi(row[8]);
-        escavationCost = stof(row[9]);
-        streetStart = stoi(row[10]);
+        int node1 = stoi(row[0]);
+        int node2 = stoi(row[1]);
+        int region = stoi(row[2]);
+        int street = stoi(row[3]);
+        int streetStart = stoi(row[4]);
+        float length = stof(row[5]);
+        int maxSpeed = stoi(row[6]);
+        int nBuildings = stoi(row[7]);
+        int numResidentials = stoi(row[8]);
+        int numIndustrial = stoi(row[9]);
+        int numComercial = stoi(row[10]);
+        int numTouristic = stoi(row[11]);
+        float escavationCost = stof(row[12]);
 
         cityGraph.regions[region]->add(node1);
         cityGraph.regions[region]->add(node2);
@@ -89,15 +79,14 @@ void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
         node->maxSpeed = maxSpeed;
         node->escavationCost = escavationCost;
 
-        node->nBuildings = numBuildings;
-        node->nComercial = numBuildings - numResidentials;
+        node->nBuildings = nBuildings;
         node->nResidential = numResidentials;
-        node->nIndustrial = 0;
-        node->nTouristic = 0;
+        node->nIndustrial = numIndustrial;
+        node->nComercial = numComercial;
+        node->nTouristic = numTouristic;
 
         node->region = region;
         node->street = street;
-        node->streetOffset = 0;
         node->streetStart = streetStart;
 
         cityGraph.addSegment(node1, node2, node);
