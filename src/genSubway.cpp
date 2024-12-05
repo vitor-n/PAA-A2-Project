@@ -7,7 +7,9 @@
 #include "heap.h"
 #include "cityParser.h"
 
-Graph* Graph::genMSTPrim() {
+using namespace std;
+
+Graph* Graph::genMSTPrim(bool verbose) {
     Graph* mst = new Graph(m_numVertices, 0);
     const int INF = 2147483647;
     int distance[m_numVertices];
@@ -44,6 +46,7 @@ Graph* Graph::genMSTPrim() {
     }
 
     // Build the MST using the parent array
+    if (verbose) cout << endl << "Determinando quais estações estarão interligadas:" << endl;
     for (vertex v = 1; v < m_numVertices; v++) {
         if (parent[v] != -1) {
             EdgeNode* mstEdge1 = new EdgeNode;
@@ -52,6 +55,8 @@ Graph* Graph::genMSTPrim() {
             mstEdge2->lenght = distance[v];
             mst->addSegment(parent[v], v, mstEdge1);
             mst->addSegment(v, parent[v], mstEdge2);
+            if (verbose) cout << "Estações " << parent[v] << " e " << v <<
+                " (custo de escavação: " << distance[v] << ")" << endl;
         }
     }
 
@@ -84,7 +89,7 @@ void genSubwayStations(CityGraph& cityGraph, int region, int stations[], bool ve
         }
     }
 
-    if (verbose) cout << "SubwayStation " << region << ": " << bestNode << endl;
+    if (verbose) cout << "Região " << region << ": " << bestNode << endl;
     stations[region] = bestNode;
 }
 
@@ -104,13 +109,14 @@ Graph* genSubwayLines(CityGraph& city, int stations[], int **path, bool verbose)
         }
     }
 
-    Graph* subwayMST = subwayFull.genMSTPrim();
+    Graph* subwayMST = subwayFull.genMSTPrim(verbose);
     return subwayMST;
 }
 
 Graph buildSubwayGraph(CityGraph& city, bool verbose) {
     int stations[city.numRegions()];
     int** path = new int*[city.numRegions()];
+    if (verbose) cout << "Selecionando qual cruzamento será a estação de cada região:" << endl;
     for (int i = 0; i < city.numRegions(); i++){
         path[i] = new int[city.numNodes()];
     }
@@ -127,6 +133,7 @@ Graph buildSubwayGraph(CityGraph& city, bool verbose) {
         outFile2 << stations[i] << endl;
     }
     outFile1 << "node1,node2" << endl;
+    if (verbose) cout << endl << "Exibindo caminhos completos entre cada estação: " << endl;
     for (int i = 0; i < subwayMST.numNodes(); i++) {
         EdgeNode* node = subwayMST.m_edges(i);
         while(node){
@@ -136,8 +143,7 @@ Graph buildSubwayGraph(CityGraph& city, bool verbose) {
                 continue;
             }
             int v = stations[j];
-            if (verbose) cout << "Region " << i << " to " << node->endVertex;
-            if (verbose) cout << " (cost: " << node->lenght << ") [ ";
+            if (verbose) cout << "Estação " << i << " para " << node->endVertex << " [ ";
             int last = v;
             while(path[i][v] != v){
                 if (verbose) cout << v << " ";

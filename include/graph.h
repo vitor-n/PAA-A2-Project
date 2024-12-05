@@ -81,7 +81,7 @@ public:
     template <typename T> void CPTDijkstra(vertex, vertex[], T[], T(EdgeNode*));
     template <typename T> void CPTDijkstraRegion(vertex, T[], int, T(EdgeNode*));
 
-    CityGraph* genMSTPrim();
+    CityGraph* genMSTPrim(bool);
 };
 
 typedef CityGraph Graph;

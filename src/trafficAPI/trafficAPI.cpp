@@ -68,7 +68,7 @@ double detTraffic(int street, int region, int maxSpeed)
     return result;
 }
 
-int secondsToSubway(int v)
+int secondsToSubway()
 {
     int nowMin = getMinutes();
     
