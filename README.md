@@ -53,6 +53,9 @@ comando usado deverá ser:
 $ make tarefa2
 ```
 
+É importante ter em mente que é necessário executar as tarefas 1 e 2 para que as
+linhas sejam geradas e que seja possível visualizá-las.
+
 Para executar a tarefa 3 (geração da rota de menor tempo), use:
 
 ```bash
@@ -64,3 +67,33 @@ Para visualizar o grafo, com as linhas geradas, o comando usado deverá ser:
 ```bash
 $ make graphread
 ```
+
+Esse commando irá mostrar uma janela semelhante à essa:
+
+(imagem aqui)
+
+As cores das arestas dos grafos representam a qual região eleas pertencem. Arestas
+pretas representam a linha de metrô gerada e arestas cinzas representam a rota
+do ônibus gerada.
+
+## Organização do repositório
+
+- `data`: contém todas as informações relativas ao grafo gerado e sendo
+operado.
+
+- `extras`: contém o código python para geração de grafos aleatórios e para a
+exibição deles.
+
+- `include`: contém os arquivos de header (`.h`), que exportam as funções e classes
+definidas no projeto.
+
+- `scripts`: contém scripts shell usados no processo de compilação.
+
+- `src`: contém o código fonte do projeto.
+
+- `src/drivers`: contém diferentes funções `main` para diferentes tarefas.
+
+- `src/structures`: contém código fonte relativo às classes usadas no projeto
+
+- `src/trafficAPI`: contém código fonte relativo à API de transito usada para
+determinar a velocidade máxima em determinados horários.
