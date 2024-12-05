@@ -35,8 +35,8 @@ using namespace std;
 //     subwayFull.print();
 //     subwayMST.print();
     
-//     ofstream outFile1("data/city-1/city-subway.csv");
-//     ofstream outFile2("data/city-1/subway-stations.csv");
+//     ofstream outFile1("data/city-1/subway-edges.csv");
+//     ofstream outFile2("data/city-1/subway-nodes.csv");
 
 //     outFile2 << "station" << endl;
 //     for (int i = 0; i < city.numRegions(); i++) {
