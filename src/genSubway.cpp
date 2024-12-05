@@ -155,9 +155,4 @@ Graph buildSubwayGraph(CityGraph& city, bool verbose) {
         }
     }
     return subwayGraph;
-} 
-
-int main(){
-    CityGraph city = cityParser("data/city-1");
-    buildSubwayGraph(city, true);
 }

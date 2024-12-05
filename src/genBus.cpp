@@ -167,8 +167,3 @@ Graph buildBusGraph(CityGraph& city, bool verbose) {
     return busGraph;
 }
 
-// int main() {
-//     CityGraph city = cityParser("data/city-1");
-//     buildBusGraph(city, true);
-// }
-

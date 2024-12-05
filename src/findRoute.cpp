@@ -1,4 +1,5 @@
 #include <iostream>
+#include <climits>
 
 #include "graph.h"
 #include "hashTable.h"
@@ -7,14 +8,20 @@
 
 #define printList(v, n) {cout << "[ "; for (int i = 0; i < n; i++) { cout << v[i] << " "; }; cout << " ]" << endl;}
 
-float compareSpeed(EdgeNode* node) {
+float compareCar(EdgeNode* node) {
     double speed = node->maxSpeed;
     int street = node->street;
     int region = node->region;
     speed = detTraffic(street, region, speed);
-    cout << speed << endl;
-    cout << node->lenght << endl;
-    return (node->lenght )/ (speed / 3.6);
+    return (node->lenght) / (speed / 3.6);
+}
+
+float compareWalking(EdgeNode* node) {
+    return (node->lenght) / (5 / 3.6);
+}
+
+float compareSubway(EdgeNode* node) {
+    return (node->lenght) / (70 / 3.6);
 }
 
 void findEdge(CityGraph& city, int region, int street, int number, int& v1, int& v2, float& dist_v1, float& dist_v2) {
@@ -112,4 +119,50 @@ void findRoute(CityGraph& city, int adress1[], int adress2[], int route[], float
     city.removeSegment(vTemp1, v2);
     city.removeSegment(v3, vTemp2);
     city.removeSegment(v4, vTemp2);
+}
+
+int findClosestSubway(CityGraph& city, float dists[]) {
+    float minDist = INT_MAX;
+    int v = -1;
+    for (auto it = city.subwayStations->begin(); it.hasNext(); it.next()) {
+        int station = it.value();
+        if (dists[station] < minDist) {
+            minDist = dists[station];
+            v = station;
+        }
+    }
+    cout << "Closest subway station is: " << v << endl;
+    return v;
+}
+
+int findClosestBus(CityGraph& city, float dists[]) {
+    float minDist = INT_MAX;
+    int v = -1;
+    for (auto it = city.busPoints->begin(); it.hasNext(); it.next()) {
+        int point = it.value();
+        if (dists[point] < minDist) {
+            minDist = dists[point];
+            v = point;
+        }
+    }
+    cout << "Closest bus stop is: " << v << endl;
+    return v;
+}
+
+void findBestRoute(CityGraph& city, Graph& subway, Graph& bus, int adress1[], int adress2[]) {
+    int routeForwardWalk[city.numNodes()];
+    int routeBackwardWalk[city.numNodes()];
+    float distanceForwardWalk[city.numNodes()];
+    float distanceBackwardWalk[city.numNodes()];
+
+    int routeForwardCar[city.numNodes()];
+    int routeBackwardCar[city.numNodes()];
+    float distanceForwardCar[city.numNodes()];
+    float distanceBackwardCar[city.numNodes()];
+
+    findRoute(city, adress1, adress2, routeForwardWalk, distanceForwardWalk, &compareCar);
+    findRoute(city, adress2, adress1, routeBackwardWalk, distanceBackwardWalk, &compareCar);
+
+    findClosestSubway(city, distanceForwardWalk);
+    findClosestBus(city, distanceForwardWalk);
 }
