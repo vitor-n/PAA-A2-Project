@@ -70,7 +70,7 @@ $ make graphread
 
 Esse commando irá mostrar uma janela semelhante à essa:
 
-(imagem aqui)
+![A screenshot showing the generated graph and lines](https://raw.githubusercontent.com/vitor-n/PAA-A2-Project/main/graphshow.pn)
 
 As cores das arestas dos grafos representam a qual região eleas pertencem. Arestas
 pretas representam a linha de metrô gerada e arestas cinzas representam a rota
