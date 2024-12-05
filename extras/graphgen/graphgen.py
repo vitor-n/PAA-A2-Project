@@ -21,6 +21,7 @@ class GraphGenerator:
         self.seeds = []
         self.subway = nx.Graph()
         self.subway_stations = []
+        self.bus = nx.Graph()
 
     def relabel_nodes(self):
         """Relabel nodes of the graph G to use linear indices."""
@@ -271,6 +272,15 @@ class GraphGenerator:
                     node = int(row["station"])
                     self.subway_stations.append(node)
 
+        city_bus = Path(f"{folder}bus-edges.csv")
+        if city_bus.is_file():
+            with open(city_bus, "r", newline="") as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    node1 = int(row["node1"])
+                    node2 = int(row["node2"])
+                    self.bus.add_edge(node1, node2)
+
     def save(self, folder):
         os.makedirs(os.path.dirname(folder), exist_ok=True)
 
@@ -344,6 +354,7 @@ class GraphGenerator:
         plt.figure(figsize=(6, 6))
         nx.draw(self.graph, self.pos, edge_color=edge_colors, node_size=0, width=3, with_labels=False)
         nx.draw(self.subway, self.pos, edge_color="black", node_size=0, width=3, with_labels=False)
+        nx.draw(self.bus, self.pos, edge_color="black", node_size=0, width=3, with_labels=False)
 
         for station in self.subway_stations:
             plt.plot(self.pos[station][0], self.pos[station][1], 'o', color="black", markersize=10)

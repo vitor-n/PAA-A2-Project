@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <climits>
 
 #include "graph.h"
@@ -150,14 +151,18 @@ int main(){
 
     //OTIMIZAÇÃO DO CICLO O(r^4)
     totalDist = optimizeBusLines(city.numRegions(), busLine, distMatrix, totalDist);
-
+    ofstream outFile1("data/city-1/bus-edges.csv");
+    outFile1 << "node1,node2" << endl;
     //busFull.print();
     for(int i = city.numRegions(); i > 0; i--){
-        int v = points[i % city.numRegions()];
-        int end = points[i - 1];
+        int v = points[busLine[i % city.numRegions()]];
+        int end = points[busLine[i - 1]];
+        int last = v;
         while(end != v){
             cout << v << " ";
-            v = path[i - 1][v];
+            v = path[busLine[i - 1]][v];
+            if (last != v) { outFile1 << last << "," << v << endl; }
+            last = v;
         }
     }
 }
