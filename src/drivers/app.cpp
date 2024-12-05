@@ -4,11 +4,15 @@
 #include <map>
 #include <functional>
 #include <chrono>
-#include <ctime>  
+#include <ctime> 
+
+#include "graph.h"
+#include "genSubway.h"
+#include "genBus.h"
+#include "cityParser.h"
+#include "findRoute.h"
 
 typedef std::map< std::string, std::function<void(void)>> command_dict;
-//                                           ^^^^^^^^
-//                               the signature of your commands. probably should have an error code.
 
 #define CLEAR "\033[2J\033[1;1H"
 #define RESET   "\033[0m"
@@ -29,6 +33,11 @@ typedef std::map< std::string, std::function<void(void)>> command_dict;
 #define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
+
+CityGraph CITY = cityParser("data/city-1");
+Graph SUBWAY = buildSubwayGraph(CITY, false);
+Graph BUS = buildBusGraph(CITY, false);
+
 using namespace std;
 
 bool parseAdressInput(const string& input, int& region, int& street, int& number) {
@@ -45,15 +54,13 @@ bool parseAdressInput(const string& input, int& region, int& street, int& number
     return true;
 }
 
-void fromto() { 
-    int region, street, number;
-    string input;
-    cout << "FROM: ";
-    getline(cin, input);
-    parseAdressInput(input, region, street, number);
-    cout << "TO:   ";
-    getline(cin, input);
-    parseAdressInput(input, region, street, number);
+void fromto() {
+    
+    int adress1[3] = {0, 3811, 1};
+    int adress2[3] = {8, 641, 2};
+    float info[3];
+    
+    findBestRoute(CITY, SUBWAY, BUS, adress1, adress2, info, 100);
 }
 
 void list() {
@@ -98,7 +105,7 @@ void printInfo(int time, float cost, int distance) {
 }
 
 int main() {
-     command_dict c;
+    command_dict c;
     c["FROMTO"] = &fromto;
     c["LIST"] = &list;
     c["LUCKY"] = &list;

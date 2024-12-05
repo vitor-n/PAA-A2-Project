@@ -12,6 +12,7 @@ CXXFLAGS = -Wall -I $(IDIR)
 SRC = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp)
 TAREFA1 = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp $(DRIVER_DIR)/tarefa1.cpp)
 TAREFA2 = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp $(DRIVER_DIR)/tarefa2.cpp)
+TAREFA3 = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp $(DRIVER_DIR)/app.cpp)
 
 ARGS = gen data/city-1 -p
 MODE = -p
@@ -28,6 +29,9 @@ tarefa1: $(TAREFA1)
 
 tarefa2: $(TAREFA2)
 	  $(CXX) $(CXXFLAGS) -o tarefa2 $(TAREFA2) && ./tarefa2
+
+tarefa3: $(TAREFA3)
+	  $(CXX) $(CXXFLAGS) -o tarefa3 $(TAREFA3) && ./tarefa3
 
 help:
 	@./scripts/help.sh $(MAKEFILE_LIST)

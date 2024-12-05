@@ -144,7 +144,6 @@ int findClosestSubway(CityGraph& city, float dists[]) {
             v = station;
         }
     }
-    cout << "Closest subway station is: " << v << endl;
     return v;
 }
 
@@ -158,7 +157,6 @@ int findClosestBus(CityGraph& city, float dists[]) {
             v = point;
         }
     }
-    cout << "Closest bus stop is: " << v << endl;
     return v;
 }
 
@@ -167,6 +165,23 @@ float minCost(Graph& graph, int v1, int v2, float (*func)(EdgeNode*)) {
     float distance[graph.numNodes()];
     graph.CPTDijkstra(v1, parents, distance, func);
     return distance[v2];
+}
+
+void displayRoute(int parents[], int numNodes, int end){
+    int route[numNodes];
+    int routeLenght = 0;
+    int v = end;
+    while(parents[v] != v){
+        route[routeLenght++] = v;
+        v = parents[v];
+    }
+    cout << "[ " << v << " ";
+    for(int i = routeLenght - 1; i > -1; i--) {
+        if (route[i] == numNodes - 2) cout << "END ";
+        else if (route[i] == numNodes - 1) cout << "START ";
+        else cout << route[i] << " ";
+    }
+    cout << "]" << endl;
 }
 
 void findBestRoute(CityGraph& city, Graph& subway, Graph& bus, int adress1[], int adress2[], float info[], int maxCost) {
@@ -223,49 +238,62 @@ void findBestRoute(CityGraph& city, Graph& subway, Graph& bus, int adress1[], in
     int bestRoute = -1;
 
     for (int i = 0; i < NUM_ROUTES; i++) {
-        cout << times[i] << " " << i << endl;
         if (times[i] < minTime || bestRoute == -1) {
             minTime = times[i];
             bestRoute = i;
         }
     }
 
-    switch (bestRoute) {
+    switch (0) { // WIP 
         case -1:
             cout << "Couldn't find a route" << endl;
             break;
         case 0:
-            cout << "Walking -> Walking" << endl;
-            break;
+            cout << times[0] << endl;
+            cout << "WALKING: ";
+            displayRoute(routeForwardWalk, city.numNodes(), v_to);
+            cout << endl;
         case 1:
-            cout << "Car -> Car" << endl;
-            break;
+            cout << times[1] << endl;
+            cout << "CAR: ";
+            displayRoute(routeForwardCar, city.numNodes(), v_to);
+            cout << endl;
         case 2:
+            cout << times[2] << endl;
             cout << "Walking -> Subway -> Walking" << endl;
-            break;
+            cout << "WALKING: ";
+            displayRoute(routeForwardWalk, city.numNodes(), vWSF);
+            cout << "SUBWAY: [" << vWSF << " " << vWSB << "] " << endl;
+            cout << "WALKING: ";
+            displayRoute(routeBackwardWalk, city.numNodes(), vWSB);
+            cout << endl;
         case 3:
+            cout << times[3] << endl;
             cout << "Walking -> Bus -> Walking" << endl;
-            break;
+            cout << "WALKING: ";
+            displayRoute(routeForwardWalk, city.numNodes(), vWBF);
+            cout << "BUS: [" << vWBF << " " << vWBB << "] " << endl;
+            cout << "WALKING: ";
+            displayRoute(routeBackwardWalk, city.numNodes(), vWBB);
+            cout << endl;
         case 4:
+            cout << times[4] << endl;
             cout << "Car -> Subway -> Car" << endl;
-            break;
+            cout << "CAR: ";
+            displayRoute(routeForwardCar, city.numNodes(), vCSF);
+            cout << "SUBWAY: [" << vCSF << " " << vCSB << "] " << endl;
+            cout << "CAR: ";
+            displayRoute(routeBackwardCar, city.numNodes(), vCSB);
+            cout << endl;
         case 5:
+            cout << times[5] << endl;
             cout << "Car -> Bus -> Car" << endl;
+            cout << "CAR: ";
+            displayRoute(routeForwardCar, city.numNodes(), vCBF);
+            cout << "BUS: [" << vCBF << " " << vCBB << "] " << endl;
+            cout << "CAR: ";
+            displayRoute(routeBackwardCar, city.numNodes(), vCBB);
+            cout << endl;
             break;
     }
-}
-
-void displayRoute(int parents[], int numNodes, int end){
-    int route[numNodes];
-    int routeLenght = 0;
-    int v = end;
-    while(parents[v] != v){
-        route[routeLenght++] = v;
-        v = parents[v];
-    }
-    cout << "[ " << v << " ";
-    for(int i = routeLenght - 1; i > -1; i--){
-        cout << route[i] << " ";
-    }
-    cout << "]" << endl;
 }
