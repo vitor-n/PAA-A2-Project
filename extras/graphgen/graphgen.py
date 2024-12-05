@@ -255,7 +255,7 @@ class GraphGenerator:
                 y = float(row["y"])
                 self.pos[node] = (x, y)
 
-        city_subway = Path(f"{folder}city-subway.csv")
+        city_subway = Path(f"{folder}subway-edges.csv")
         if city_subway.is_file():
             with open(city_subway, "r", newline="") as csvfile:
                 reader = csv.DictReader(csvfile)
@@ -264,7 +264,7 @@ class GraphGenerator:
                     node2 = int(row["node2"])
                     self.subway.add_edge(node1, node2)
 
-        city_subway_stations = Path(f"{folder}subway-stations.csv")
+        city_subway_stations = Path(f"{folder}subway-nodes.csv")
         if city_subway_stations.is_file():
             with open(city_subway_stations, "r", newline="") as csvfile:
                 reader = csv.DictReader(csvfile)

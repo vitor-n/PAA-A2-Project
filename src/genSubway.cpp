@@ -108,4 +108,6 @@ Graph* genSubwayLines(CityGraph& city, Graph& subwayFull, int stations[], int **
     return subwayMST;
 }
 
-
+Graph* genSubway(CityGraph& city, bool verbose) {
+    
+} 

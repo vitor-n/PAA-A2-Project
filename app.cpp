@@ -1,8 +1,8 @@
-#include <map>
-#include <functional>
+#include <iostream>
 #include <sstream>
 #include <string>
-#include <iostream>
+#include <map>
+#include <functional>
 #include <chrono>
 #include <ctime>  
 
@@ -45,7 +45,7 @@ bool parseAdressInput(const string& input, int& region, int& street, int& number
     return true;
 }
 
-void command1() { 
+void fromto() { 
     int region, street, number;
     string input;
     cout << "FROM: ";
@@ -56,14 +56,20 @@ void command1() {
     parseAdressInput(input, region, street, number);
 }
 
-void command2() { cout << "commandb" << endl; }
-void command3() {
-     cout << 1+912 << endl; 
+void list() {
+}
+
+void help()  {
+    printf("%sFROMTO%s: Find the best route between two adresses, format <ZIP, STREET, NUMBER>\n", BOLDGREEN, RESET);
+    printf("%sLUCKY%s: Find the best route between two random adresses. Feeling lucky?\n", BOLDYELLOW, RESET);
+    printf("%sLIST%s: List set of available adresses\n", BOLDGREEN, RESET);
+    printf("%sCLEAR%s: Clear the screen\n", BOLDGREEN, RESET);
+    printf("%sHELP%s: Show this message\n", BOLDGREEN, RESET);
 }
 
 void commands() {
     cout << endl;
-    printf ("Commands %sFROMTO%s | %sLIST%s | %sCLEAR%s | %sHELP%s\n", BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
+    printf ("Commands: %sFROMTO%s | %sLUCKY%s | %sLIST%s | %sCLEAR%s | %sHELP%s\n", BOLDGREEN, RESET, BOLDYELLOW, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
     cout << "> ";
 }
 
@@ -71,14 +77,8 @@ void welcome() {
     time_t now = time(0);
     tm* localTime = localtime(&now);
     printf ("Welcome to %sG%so%so%sg%so%sl%s-Routes!\n", BOLDGREEN, BOLDBLUE, BOLDRED, BOLDGREEN, BOLDBLUE, BOLDYELLOW, RESET);
-    cout <<  "Making your routes 10^100 times better!" << endl;
-    cout << "Sytem time: " << localTime->tm_hour << ":" << localTime->tm_min << endl;
-}
-
-
-void routeInput() {
-    cout << "FROM: " << endl;
-    cout << "TO:   " << endl;
+    cout << "Making your routes 10^100 times better!" << endl;
+    cout << "System time: " << localTime->tm_hour << ":" << localTime->tm_min << endl;
 }
 
 void clrscr() { 
@@ -99,9 +99,10 @@ void printInfo(int time, float cost, int distance) {
 
 int main() {
      command_dict c;
-    c["FROMTO"] = &command1;
-    c["LIST"] = &command2;
-    c["HELP"] = &command3;
+    c["FROMTO"] = &fromto;
+    c["LIST"] = &list;
+    c["LUCKY"] = &list;
+    c["HELP"] = &help;
     c["CLEAR"] = &clrscr;
 
     cout << CLEAR;
