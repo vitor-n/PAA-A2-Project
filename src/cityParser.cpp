@@ -49,7 +49,6 @@ void nodesFromCSV(CityGraph& cityPath, string folderPath) {
 void edgesFromCSV(CityGraph& cityGraph, string folderPath) {
     ifstream file(folderPath + "/city-edges.csv");
     string line;
-    int numRows = 0;
     vector<string> row;
     
     getline(file, line);

@@ -40,6 +40,16 @@ Graph BUS = buildBusGraph(CITY, false);
 
 using namespace std;
 
+void printInfo(int time, float cost, int distance) {
+    int h = time/3600;
+    int m = (time%3600)/60;
+    int s = time%60;
+
+    printf("\t%s%02d:%02d:%02d%s | ", YELLOW, h, m, s, RESET);
+    printf("%s$%.2f%s | ", MAGENTA, cost, RESET);
+    printf("%s%dm%s\n", CYAN, distance, RESET);
+}
+
 bool parseAdressInput(const string& input, int& region, int& street, int& number) {
     istringstream iss(input);
     int count = 0;
@@ -61,9 +71,16 @@ void fromto() {
     float info[3];
     
     findBestRoute(CITY, SUBWAY, BUS, adress1, adress2, info, 100);
+
+    printInfo(info[0], 0, 0);
 }
 
 void list() {
+}
+
+void quit() {
+    cout << "Bye!" << endl;
+    exit(0);
 }
 
 void help()  {
@@ -71,12 +88,13 @@ void help()  {
     printf("%sLUCKY%s: Find the best route between two random adresses. Feeling lucky?\n", BOLDYELLOW, RESET);
     printf("%sLIST%s: List set of available adresses\n", BOLDGREEN, RESET);
     printf("%sCLEAR%s: Clear the screen\n", BOLDGREEN, RESET);
+    printf("%sQUIT%s: Quit\n", BOLDGREEN, RESET);
     printf("%sHELP%s: Show this message\n", BOLDGREEN, RESET);
 }
 
 void commands() {
     cout << endl;
-    printf ("Commands: %sFROMTO%s | %sLUCKY%s | %sLIST%s | %sCLEAR%s | %sHELP%s\n", BOLDGREEN, RESET, BOLDYELLOW, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
+    printf ("Commands: %sFROMTO%s | %sLUCKY%s | %sLIST%s | %sCLEAR%s | %sQUIT%s | %sHELP%s\n", BOLDGREEN, RESET, BOLDYELLOW, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
     cout << "> ";
 }
 
@@ -93,24 +111,20 @@ void clrscr() {
     welcome();    
 }
 
-void printInfo(int time, float cost, int distance) {
-    int h = time/3600;
-    int m = (time%3600)/60;
-    int s = time%60;
-
-    
-    printf("\t%s%02d:%02d:%02d%s | ", YELLOW, h, m, s, RESET);
-    printf("%s$%.2f%s | ", MAGENTA, cost, RESET);
-    printf("%s%dm%s\n", CYAN, distance, RESET);
-}
-
 int main() {
     command_dict c;
     c["FROMTO"] = &fromto;
+    c["fromto"] = &fromto;
     c["LIST"] = &list;
+    c["list"] = &list;
     c["LUCKY"] = &list;
+    c["lucky"] = &list;
     c["HELP"] = &help;
+    c["help"] = &help;
+    c["QUIT"] = &quit;
+    c["quit"] = &quit;
     c["CLEAR"] = &clrscr;
+    c["clear"] = &clrscr;
 
     cout << CLEAR;
     welcome();

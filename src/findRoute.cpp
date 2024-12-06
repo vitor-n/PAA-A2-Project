@@ -38,7 +38,6 @@ float compareSubway(EdgeNode* node) {
 void findEdge(CityGraph& city, int region, int street, int number, int& v1, int& v2, float& dist_v1, float& dist_v2) {
     int v = -1;
     int startNode = -1;
-    int i = 0;
     for (auto it = city.regions[region]->begin(); it.hasNext(); it.next()) {
         v = it.value();
         
@@ -185,7 +184,7 @@ void displayRoute(int parents[], int numNodes, int end){
 }
 
 void findBestRoute(CityGraph& city, Graph& subway, Graph& bus, int adress1[], int adress2[], float info[], int maxCost) {
-    int v_from = city.numNodes() - 1;
+    //int v_from = city.numNodes() - 1;
     int v_to = city.numNodes() - 2;
 
     int routeForwardWalk[city.numNodes()];
