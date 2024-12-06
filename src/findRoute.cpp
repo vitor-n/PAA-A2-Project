@@ -174,11 +174,26 @@ void displayRoute(int parents[], int numNodes, int end){
         route[routeLenght++] = v;
         v = parents[v];
     }
-    cout << "[ " << v << " ";
+    cout << "[ ";
     for(int i = routeLenght - 1; i > -1; i--) {
-        if (route[i] == numNodes - 2) cout << "END ";
-        else if (route[i] == numNodes - 1) cout << "START ";
-        else cout << route[i] << " ";
+        if (route[i] == numNodes - 1) continue;
+        if (route[i] == numNodes - 2) continue;
+        cout << route[i] << " ";
+    }
+    cout << "]" << endl;
+}
+
+void displayRouteBackward(int parents[], int numNodes, int start){
+    int route[numNodes];
+    int routeLenght = 0;
+    int v = start;
+    while(parents[v] != v){
+        route[routeLenght++] = v;
+        v = parents[v];
+    }
+    cout << "[ ";
+    for(int i = 0; i < routeLenght; i++) {
+        cout << route[i] << " ";
     }
     cout << "]" << endl;
 }
@@ -262,36 +277,36 @@ void findBestRoute(CityGraph& city, Graph& subway, Graph& bus, int adress1[], in
             cout << "Walking -> Subway -> Walking" << endl;
             cout << "WALKING: ";
             displayRoute(routeForwardWalk, city.numNodes(), vWSF);
-            cout << "SUBWAY: [" << vWSF << " " << vWSB << "] " << endl;
+            cout << "SUBWAY: [ " << vWSF << " " << vWSB << " ] " << endl;
             cout << "WALKING: ";
-            displayRoute(routeBackwardWalk, city.numNodes(), vWSB);
+            displayRouteBackward(routeBackwardWalk, city.numNodes(), vWSB);
             cout << endl;
         case 3:
             cout << times[3] << endl;
             cout << "Walking -> Bus -> Walking" << endl;
             cout << "WALKING: ";
             displayRoute(routeForwardWalk, city.numNodes(), vWBF);
-            cout << "BUS: [" << vWBF << " " << vWBB << "] " << endl;
+            cout << "BUS: [ " << vWBF << " " << vWBB << " ] " << endl;
             cout << "WALKING: ";
-            displayRoute(routeBackwardWalk, city.numNodes(), vWBB);
+            displayRouteBackward(routeBackwardWalk, city.numNodes(), vWBB);
             cout << endl;
         case 4:
             cout << times[4] << endl;
             cout << "Car -> Subway -> Car" << endl;
             cout << "CAR: ";
             displayRoute(routeForwardCar, city.numNodes(), vCSF);
-            cout << "SUBWAY: [" << vCSF << " " << vCSB << "] " << endl;
+            cout << "SUBWAY: [ " << vCSF << " " << vCSB << " ] " << endl;
             cout << "CAR: ";
-            displayRoute(routeBackwardCar, city.numNodes(), vCSB);
+            displayRouteBackward(routeBackwardCar, city.numNodes(), vCSB);
             cout << endl;
         case 5:
             cout << times[5] << endl;
             cout << "Car -> Bus -> Car" << endl;
             cout << "CAR: ";
             displayRoute(routeForwardCar, city.numNodes(), vCBF);
-            cout << "BUS: [" << vCBF << " " << vCBB << "] " << endl;
+            cout << "BUS: [ " << vCBF << " " << vCBB << " ] " << endl;
             cout << "CAR: ";
-            displayRoute(routeBackwardCar, city.numNodes(), vCBB);
+            displayRouteBackward(routeBackwardCar, city.numNodes(), vCBB);
             cout << endl;
             break;
     }

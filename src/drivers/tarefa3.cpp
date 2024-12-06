@@ -112,7 +112,7 @@ void lucky() {
 
     findBestRoute(CITY, SUBWAY, BUS, adress1, adress2, info, 100);
 
-    printInfo(info);
+    //printInfo(info);
 }
 
 
