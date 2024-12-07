@@ -19,19 +19,28 @@ MODE = -p
 
 .PHONY: build help run clean
 
-all: tarefa1 tarefa2 tarefa3 ## Build and run all tasks
+all: tarefa1 tarefa2 tarefa3
+tarefa1: buildtarefa1 runtarefa1 ## Build and run tarefa1
+tarefa2: buildtarefa2 runtarefa2 ## Build and run tarefa2
+tarefa3: buildtarefa3 runtarefa3 ## Build and run tarefa3
 
 build: $(SRC)
 	$(CXX) $(CXXFLAGS) -o out $(SRC)
 
-tarefa1: $(TAREFA1) ## Build and run tarefa1
-	  $(CXX) $(CXXFLAGS) -o tarefa1 $(TAREFA1) && ./tarefa1
+buildtarefa1: $(TAREFA1)
+	  $(CXX) $(CXXFLAGS) -o tarefa1 $(TAREFA1)
+runtarefa1:	  
+	./tarefa1
 
-tarefa2: $(TAREFA2) ## Build and run tarefa2
-	  $(CXX) $(CXXFLAGS) -o tarefa2 $(TAREFA2) && ./tarefa2
+buildtarefa2: $(TAREFA2)
+	  $(CXX) $(CXXFLAGS) -o tarefa2 $(TAREFA2)
+runtarefa2:
+	./tarefa2
 
-tarefa3: $(TAREFA3) ## Build and run tarefa3
-	  $(CXX) $(CXXFLAGS) -o tarefa3 $(TAREFA3) && ./tarefa3
+buildtarefa3: $(TAREFA3)
+	  $(CXX) $(CXXFLAGS) -o tarefa3 $(TAREFA3)
+runtarefa3:
+	./tarefa3
 
 help: ## Show this help
 	@./scripts/help.sh $(MAKEFILE_LIST)
