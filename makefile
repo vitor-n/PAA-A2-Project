@@ -12,38 +12,35 @@ CXXFLAGS = -Wall -I $(IDIR)
 SRC = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp)
 TAREFA1 = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp $(DRIVER_DIR)/tarefa1.cpp)
 TAREFA2 = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp $(DRIVER_DIR)/tarefa2.cpp)
-TAREFA3 = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp $(DRIVER_DIR)/app.cpp)
+TAREFA3 = $(wildcard $(SRC_DIR)/*.cpp $(STRUCT_DIR)/*.cpp $(TRAFFIC_DIR)/*.cpp $(DRIVER_DIR)/tarefa3.cpp)
 
 ARGS = gen data/city-1 -p
 MODE = -p
 
 .PHONY: build help run clean
 
-all: build run
+all: tarefa1 tarefa2 tarefa3 ## Build and run all tasks
 
-build: $(SRC) ## Build the project
+build: $(SRC)
 	$(CXX) $(CXXFLAGS) -o out $(SRC)
 
-tarefa1: $(TAREFA1)
+tarefa1: $(TAREFA1) ## Build and run tarefa1
 	  $(CXX) $(CXXFLAGS) -o tarefa1 $(TAREFA1) && ./tarefa1
 
-tarefa2: $(TAREFA2)
+tarefa2: $(TAREFA2) ## Build and run tarefa2
 	  $(CXX) $(CXXFLAGS) -o tarefa2 $(TAREFA2) && ./tarefa2
 
-tarefa3: $(TAREFA3)
+tarefa3: $(TAREFA3) ## Build and run tarefa3
 	  $(CXX) $(CXXFLAGS) -o tarefa3 $(TAREFA3) && ./tarefa3
 
-help:
+help: ## Show this help
 	@./scripts/help.sh $(MAKEFILE_LIST)
 
-graphgen: ## Generates the city graph WIP
+graphgen: ## Generates the city graph
 	python extras/graphgen/graphgen.py $(ARGS)
 
-graphread: ## Reads the city graph WIP
+graphread: ## Reads the city graph
 	python extras/graphgen/graphgen.py read data/city-1 -p
-
-run: ## Run the project
-	./out
 
 test:
 	$(CXX) $(CXXFLAGS) -o test $(wildcard ./*.cpp)

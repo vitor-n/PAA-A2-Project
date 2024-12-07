@@ -40,43 +40,35 @@ Graph BUS = buildBusGraph(CITY, false);
 
 using namespace std;
 
-bool parseAdressInput(const string& input, int& region, int& street, int& number) {
-    istringstream iss(input);
-    int count = 0;
-    if (iss >> region) count++;
-    if (iss >> street) count++;
-    if (iss >> number) count++;
+void printInfo(float info[]) {
+    int time = info[0];
+    float cost = info[1];
+    //int distance = info[2];
 
-    string remaining;
-    if (count == 3 && !(iss >> remaining)) {
-        return true;
-    }
-    return true;
+    int h = time/3600;
+    int m = (time%3600)/60;
+    int s = time%60;
+
+    printf("\t%s%02d:%02d:%02d%s | ", YELLOW, h, m, s, RESET);
+    printf("%s$%.2f%s | ", MAGENTA, cost, RESET);
+    //printf("%s%dm%s\n", CYAN, distance, RESET);
 }
 
-void fromto() {
-    
-    int adress1[3] = {0, 3811, 1};
-    int adress2[3] = {8, 641, 2};
-    float info[3];
-    
-    findBestRoute(CITY, SUBWAY, BUS, adress1, adress2, info, 100);
-}
-
-void list() {
+void quit() {
+    cout << "Bye!" << endl;
+    exit(0);
 }
 
 void help()  {
-    printf("%sFROMTO%s: Find the best route between two adresses, format <ZIP, STREET, NUMBER>\n", BOLDGREEN, RESET);
-    printf("%sLUCKY%s: Find the best route between two random adresses. Feeling lucky?\n", BOLDYELLOW, RESET);
-    printf("%sLIST%s: List set of available adresses\n", BOLDGREEN, RESET);
+    printf("%sLUCKY%s: Find the best route between two random adresses < ZIP STREET N >. Feeling lucky?\n", BOLDYELLOW, RESET);
     printf("%sCLEAR%s: Clear the screen\n", BOLDGREEN, RESET);
+    printf("%sQUIT%s: Quit\n", BOLDGREEN, RESET);
     printf("%sHELP%s: Show this message\n", BOLDGREEN, RESET);
 }
 
 void commands() {
     cout << endl;
-    printf ("Commands: %sFROMTO%s | %sLUCKY%s | %sLIST%s | %sCLEAR%s | %sHELP%s\n", BOLDGREEN, RESET, BOLDYELLOW, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
+    printf ("Commands:  %sLUCKY%s | %sCLEAR%s | %sQUIT%s | %sHELP%s\n", BOLDYELLOW, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
     cout << "> ";
 }
 
@@ -93,24 +85,55 @@ void clrscr() {
     welcome();    
 }
 
-void printInfo(int time, float cost, int distance) {
-    int h = time/3600;
-    int m = (time%3600)/60;
-    int s = time%60;
-
+void getRandomAdress(int adress[]) {
+    int id = rand() % (CITY.numNodes() / 2) + 1;
     
-    printf("\t%s%02d:%02d:%02d%s | ", YELLOW, h, m, s, RESET);
-    printf("%s$%.2f%s | ", MAGENTA, cost, RESET);
-    printf("%s%dm%s\n", CYAN, distance, RESET);
+    adress[0] = CITY.m_edges(id)->region;
+    adress[1] = CITY.m_edges(id)->street;
+    adress[2] = rand() % CITY.m_edges(id)->nBuildings;
+}
+
+void lucky() {
+    
+    int adress1[3];
+    int adress2[3];
+    float info[3] = {0, 0, 0};
+    float maxCost = 0;
+
+    printf("%sMAXCOST:%s ", BOLDCYAN, RESET);
+    scanf("%f", &maxCost);
+
+    getRandomAdress(adress1);
+    getRandomAdress(adress2);
+
+    printf("%sFROM:%s Adress 1: < ", BOLDCYAN, RESET);
+    for (int i = 0; i < 3; i++) { cout << adress1[i] << " "; }
+    cout << ">" << endl;
+    printf("%sTO:%s   Adress 2: < ", BOLDCYAN, RESET);
+    for (int i = 0; i < 3; i++) { cout << adress2[i] << " "; }
+    cout << ">" << endl;
+    cout << endl;
+
+    findBestRoute(CITY, SUBWAY, BUS, adress1, adress2, info, maxCost);
+
+    printInfo(info);
+    cout << endl;
+}
+
+void dunder() {
+    return;
 }
 
 int main() {
     command_dict c;
-    c["FROMTO"] = &fromto;
-    c["LIST"] = &list;
-    c["LUCKY"] = &list;
+    c["LUCKY"] = &lucky;
+    c["lucky"] = &lucky;
     c["HELP"] = &help;
+    c["help"] = &help;
+    c["QUIT"] = &quit;
+    c["quit"] = &quit;
     c["CLEAR"] = &clrscr;
+    c["clear"] = &clrscr;
 
     cout << CLEAR;
     welcome();
@@ -118,8 +141,9 @@ int main() {
 
     string input;
     while(getline(cin, input)) { 
-        cout << endl;
         auto it = c.find(input);
+        if (input == "") continue;
+        cout << endl;
         if(it != end(c)) {
             (it->second)(); // execute the command
             commands();
