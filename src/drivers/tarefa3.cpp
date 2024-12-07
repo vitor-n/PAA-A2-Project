@@ -43,7 +43,7 @@ using namespace std;
 void printInfo(float info[]) {
     int time = info[0];
     float cost = info[1];
-    int distance = info[2];
+    //int distance = info[2];
 
     int h = time/3600;
     int m = (time%3600)/60;
@@ -51,7 +51,7 @@ void printInfo(float info[]) {
 
     printf("\t%s%02d:%02d:%02d%s | ", YELLOW, h, m, s, RESET);
     printf("%s$%.2f%s | ", MAGENTA, cost, RESET);
-    printf("%s%dm%s\n", CYAN, distance, RESET);
+    //printf("%s%dm%s\n", CYAN, distance, RESET);
 }
 
 void quit() {
@@ -68,7 +68,7 @@ void help()  {
 
 void commands() {
     cout << endl;
-    printf ("Commands: %sLUCKY%s | %sCLEAR%s | %sQUIT%s | %sHELP%s\n", BOLDYELLOW, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
+    printf ("Commands:  %sLUCKY%s | %sCLEAR%s | %sQUIT%s | %sHELP%s\n", BOLDYELLOW, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET, BOLDGREEN, RESET);
     cout << "> ";
 }
 
@@ -98,23 +98,31 @@ void lucky() {
     int adress1[3];
     int adress2[3];
     float info[3] = {0, 0, 0};
+    float maxCost = 0;
+
+    printf("%sMAXCOST:%s ", BOLDCYAN, RESET);
+    scanf("%f", &maxCost);
 
     getRandomAdress(adress1);
     getRandomAdress(adress2);
 
-    printf("%sFROM%s Adress 1: < ", BOLDCYAN, RESET);
+    printf("%sFROM:%s Adress 1: < ", BOLDCYAN, RESET);
     for (int i = 0; i < 3; i++) { cout << adress1[i] << " "; }
     cout << ">" << endl;
-    printf("%sTO%s Adress 2: < ", BOLDCYAN, RESET);
+    printf("%sTO:%s   Adress 2: < ", BOLDCYAN, RESET);
     for (int i = 0; i < 3; i++) { cout << adress2[i] << " "; }
     cout << ">" << endl;
     cout << endl;
 
-    findBestRoute(CITY, SUBWAY, BUS, adress1, adress2, info, 100);
+    findBestRoute(CITY, SUBWAY, BUS, adress1, adress2, info, maxCost);
 
-    //printInfo(info);
+    printInfo(info);
+    cout << endl;
 }
 
+void dunder() {
+    return;
+}
 
 int main() {
     command_dict c;
@@ -133,8 +141,9 @@ int main() {
 
     string input;
     while(getline(cin, input)) { 
-        cout << endl;
         auto it = c.find(input);
+        if (input == "") continue;
+        cout << endl;
         if(it != end(c)) {
             (it->second)(); // execute the command
             commands();
