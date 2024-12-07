@@ -106,10 +106,10 @@ void lucky() {
     getRandomAdress(adress1);
     getRandomAdress(adress2);
 
-    printf("%sFROM:%s Adress 1: < ", BOLDCYAN, RESET);
+    printf("%sFROM:%s  Adress 1: < ", BOLDCYAN, RESET);
     for (int i = 0; i < 3; i++) { cout << adress1[i] << " "; }
     cout << ">" << endl;
-    printf("%sTO:%s   Adress 2: < ", BOLDCYAN, RESET);
+    printf("%sTO:%s    Adress 2: < ", BOLDCYAN, RESET);
     for (int i = 0; i < 3; i++) { cout << adress2[i] << " "; }
     cout << ">" << endl;
     cout << endl;
