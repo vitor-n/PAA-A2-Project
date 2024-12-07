@@ -35,7 +35,7 @@ void genBusPoints(CityGraph& cityGraph, int region, int points[], bool verbose) 
         }
     }
 
-    if (verbose) cout << "Ponto obrigatório da região " << region << ": " << bestNode << endl;
+    if (verbose) cout << "Ponto obrigatorio da regiao " << region << ": " << bestNode << endl;
     points[region] = bestNode;
 }
 
@@ -106,7 +106,7 @@ float optimizeBusLines(int numRegions, int busLine[], float** distMatrix, float 
                     improved = true;
                     if(verbose) cout << "Pontos " << busLine[i + 1] << " e " << busLine[j] << " trocaram de lugar no ciclo: [ " << busLine[0] << " ";
                     if(verbose) for(int k = 1; k < numRegions; k++) {cout << "(" << distMatrix[busLine[k - 1]][busLine[k]] << ") " << busLine[k] << " ";}
-                    if(verbose) cout << " ] novo custo é: " << totalDist << endl;
+                    if(verbose) cout << " ] novo custo e: " << totalDist << endl;
                 }
             }
         }
@@ -118,7 +118,7 @@ Graph buildBusGraph(CityGraph& city, bool verbose) {
     Graph busFull = Graph(city.numRegions(), 0);
 
     //ESCOLHA DOS PONTOS QUE DEVE PASSAR NA REGIÃO
-    if(verbose) cout << "Fazendo escolha dos pontos nos quais a linha deve passar, para cada região: " << endl;
+    if(verbose) cout << "Fazendo escolha dos pontos nos quais a linha deve passar, para cada regiao: " << endl;
     int points[city.numRegions()];
     int** path = new int*[city.numRegions()];
     for (int i = 0; i < city.numRegions(); i++){
@@ -141,7 +141,7 @@ Graph buildBusGraph(CityGraph& city, bool verbose) {
     genBusLinesFull(city, points, distMatrix, path);
 
     //DETERMINAÇÃO DO PRIMEIRO CICLO HAMILTONIANO QUE TEM
-    if(verbose) cout << endl << "Definindo o primeiro ciclo, que será otimizado:" << endl;
+    if(verbose) cout << endl << "Definindo o primeiro ciclo, que sera otimizado:" << endl;
     int busLine[city.numRegions()];
     for(int i = 0; i < city.numRegions(); i++) {busLine[i] = -1;}
     float totalDist = genBusLines(city.numRegions(), busLine, distMatrix, verbose);
